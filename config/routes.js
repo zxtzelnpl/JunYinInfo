@@ -24,6 +24,7 @@ module.exports = function (app, io) {
 
     /*LeaveMes*/
     app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userList);
+    app.post('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userSearch);
 
     /*User*/
     app.post('/user/signin', User.signIn);

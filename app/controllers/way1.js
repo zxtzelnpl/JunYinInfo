@@ -62,6 +62,7 @@ exports.userList = function (req, res) {
     let pageNum = req.params.pageNum;
     let totalPageNum;
     let totalNum;
+
     let optFind = {level: 0};
 
     let clickCount = new Promise(function (resolve, reject) {
@@ -98,8 +99,8 @@ exports.userList = function (req, res) {
         })
     });
 
-    let chatCount = new Promise(function(resolve,reject){
-        UserModel.find({chat:true}).count(function(err,count){
+    let chatCount = new Promise(function (resolve, reject) {
+        UserModel.find({chat: true}).count(function (err, count) {
             if (err) {
                 reject(err)
             }
@@ -108,7 +109,7 @@ exports.userList = function (req, res) {
     });
 
     Promise
-        .all([clickCount,listCount, lists,chatCount])
+        .all([clickCount, listCount, lists, chatCount])
         .then(function (results) {
             res.render('leaveMesList', {
                 title: '留言列表',
@@ -116,13 +117,104 @@ exports.userList = function (req, res) {
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
-                clickCount:results[0],
-                listCount:results[1],
-                chatCount:results[3]
+                clickCount: results[0],
+                listCount: results[1],
+                chatCount: results[3]
             })
             ;
         })
-        .catch(function(err){
+        .catch(function (err) {
+            console.log(err);
+        })
+    ;
+};
+
+exports.userSearch = function (req, res) {
+    let pageNum = req.params.pageNum;
+    let totalPageNum;
+    let totalNum;
+
+    let timeStart = new Date(req.body.search['timeStart']);
+    let timeEnd = new Date(req.body.search['timeEnd']);
+
+    let optFind = {
+        level: 0,
+        createAt: {
+            "$gte": timeStart,
+            "$lt": timeEnd
+        }
+    };
+
+    let clickCount = new Promise(function (resolve, reject) {
+        ClickCountModel.find({
+            createAt: {
+                "$gte": timeStart,
+                "$lt": timeEnd
+            }
+        }).count(function (err, count) {
+            if (err) {
+                reject(err)
+            }
+            resolve(count);
+        })
+    });
+
+    let listCount = new Promise(function (resolve, reject) {
+        UserModel.find(optFind).count(function (err, count) {
+            if (err) {
+                reject(err)
+            }
+            resolve(count);
+        });
+    });
+
+    let lists = listCount.then(function (count) {
+        return new Promise(function (resolve, reject) {
+            totalPageNum = Math.ceil(count / pageSize);
+            UserModel.find(optFind)
+                .skip((pageNum - 1) * pageSize)
+                .limit(pageSize)
+                .populate('room', 'title')
+                .exec(function (err, users) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(users);
+                });
+        })
+    });
+
+    let chatCount = new Promise(function (resolve, reject) {
+        UserModel.find({
+            chat: true,
+            createAt: {
+                "$gte": timeStart,
+                "$lt": timeEnd
+            }
+        }).count(function (err, count) {
+            if (err) {
+                reject(err)
+            }
+            resolve(count);
+        })
+    });
+
+    Promise
+        .all([clickCount, listCount, lists, chatCount])
+        .then(function (results) {
+            res.render('searchMesList', {
+                title: '留言列表',
+                users: results[2],
+                totalPageNum: totalPageNum,
+                pageNum: pageNum,
+                totalNum: totalNum,
+                clickCount: results[0],
+                listCount: results[1],
+                chatCount: results[3]
+            })
+            ;
+        })
+        .catch(function (err) {
             console.log(err);
         })
     ;
