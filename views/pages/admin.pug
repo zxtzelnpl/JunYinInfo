@@ -1,0 +1,29 @@
+extends ../admin/layout
+
+block css
+
+block content
+    if(user)
+        div.row
+            div.page-header
+                h1.container.text-center
+                    | #{user.name},您已经登录
+                    a.btn.btn-danger(id="signOut_ls_999") 登出
+    else
+        div.row
+            div.page-header
+                h1.container.text-center
+                    | 君银直播室
+                    small 登录入口
+        div.row
+            div.form-group.col-sm-4.col-sm-offset-4
+                label(for="signInPassword") 登录名：
+                input.form-control(id="signInName" type="text")
+            div.form-group.col-sm-4.col-sm-offset-4
+                label(for="signInPassword") 密码：
+                input.form-control(id="signInPassword" type="password")
+            div.form-group.col-sm-4.col-sm-offset-4.text-center
+                a.btn.btn-success(id="submit") 提交
+
+block js
+    script(src="/admin/js/admin.js")

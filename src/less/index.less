@@ -1,0 +1,332 @@
+@import 'normalize/normalize';
+
+@headerH:50px;
+@gap:10px;
+
+html{
+  width:100%;
+  height:100%;
+}
+
+body{
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+}
+
+a{
+  text-decoration: none;
+}
+#app{
+  width:100%;
+  height:100%;
+}
+.app{
+  width:100%;
+  height:100%;
+
+  //头部样式
+  .header{
+    margin-bottom:@gap;
+    width:100%;
+    height:@headerH;
+    background:#000;
+    color:#fff;
+    .clear;
+    .title{
+      float:left;
+      height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      img{
+        display:block;
+      }
+    }
+    .onLines{
+      float:left;
+      height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      span{
+        padding:5px 5px;
+        color:#fff;
+        font-weight:bold;
+      }
+    }
+    .user{
+      float:right;
+      width:@headerH;
+      height:100%;
+      display:flex;
+      flex-direction:row;
+      flex-wrap:wrap;
+      justify-content:center;
+      align-items:flex-end;
+      align-content:center;
+      div{
+        width:100%;
+        height:50%;
+        a{
+          display:block;
+          width:100%;
+          text-align: center;
+          line-height:@headerH/2;
+          cursor:pointer;
+          &:hover{
+            font-weight:bold;
+          }
+        }
+        span{
+          display:block;
+          width:100%;
+          text-align: center;
+          line-height:@headerH/2;
+          &:hover{
+            font-weight:bold;
+          }
+        }
+      }
+    }
+  }
+
+  //主体样式
+  .main{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content:space-between;
+    align-items:center;
+
+    margin:0 @gap @gap;
+    width:auto;
+    height:calc(~"100% -" @headerH + @gap*2);
+
+    >div{
+      height:100%;
+      //导航栏样式
+      &.nav{
+        flex-grow: 2;
+
+        min-width:100px;
+        max-width:120px;
+        background:lemonchiffon;
+      }
+      //视频样式
+      &.video{
+        flex-grow: 1;
+
+        display:flex;
+        flex-direction:column;
+        flex-wrap:nowrap;
+        flex-flow:column nowrap;
+        justify-content:space-between;
+
+        min-width:600px;
+        max-width:900px;
+        background:lightblue;
+        .videoBox{
+          width:100%;
+
+          flex-grow: 1;
+          align-self:flex-start;
+        }
+        .Banner{
+          position:relative;
+          width:100%;
+
+          align-self:flex-end;
+          overflow: hidden;
+
+          .carouselWrap{
+            display:flex;
+
+            flex-direction: row;
+            flex-wrap: nowrap;
+            flex-flow:row nowrap;
+            justify-content: center;
+
+            transition:transform 1s linear;
+            .carouselBox{
+
+            }
+          }
+          img{
+            width:100%;
+            display:block;
+          }
+        }
+      }
+      //聊天框样式
+      &.chat{
+        flex-grow: 1;
+
+        min-width:400px;
+        max-width:900px;
+        background: palevioletred;
+
+        .messagesBox{
+          box-sizing: border-box;
+          margin:16px 0;
+          padding:0 16px;
+          height:~"calc(100% - 232px)";
+          cursor:pointer;
+          overflow: hidden;
+          position: relative;
+          .message{
+            padding-bottom:10px;
+            >div{
+              user-select:none;
+              &.name{
+                float:left;
+                font-weight: bold;
+              }
+              &.time{
+                float:right;
+                font-style:italic;
+                color:#c0c0c0;
+                font-size:12px;
+              }
+              &.content{
+                padding:5px;
+                clear:both;
+                border-radius:5px;
+                background:#fff;
+              }
+            }
+          }
+        }
+        .chatInputBox{
+          height:200px;
+        }
+      }
+    }
+  }
+
+  //弹出框样式
+  .popBox{
+    position: fixed;
+    top:0;
+    left:0;
+
+    //display:none;
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:100%;
+
+    background:rgba(10,10,10,.6);
+
+    .box{
+      background: #fff;
+    }
+  }
+
+  .signBox{
+    //display:none;
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: center;
+    width:400px;
+    height:200px;
+    .userName{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+
+      width:100%;
+      height:40px;
+
+      text-align:center;
+
+      label{
+        display:inline-block;
+        width:80px;
+      }
+
+    }
+    .password{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+
+      width:100%;
+      height:40px;
+
+      text-align:center;
+
+      label{
+        display:inline-block;
+        width:80px;
+      }
+
+    }
+    .button{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+
+      width:100%;
+      height:40px;
+
+      text-align:center;
+
+      .btn{
+        padding: 0 20px;
+        height:40px;
+        line-height:40px;
+      }
+    }
+  }
+}
+
+
+/*自定义滚动条样式*/
+//.iScrollHorizontalScrollbar {
+//  position: absolute;
+//  z-index: 9999;
+//  height: 16px;
+//  left: 2px;
+//  right: 2px;
+//  bottom: 2px;
+//  overflow: hidden;
+//  .iScrollBothScrollbars{
+//    right: 18px;
+//  }
+//  .iScrollIndicator {
+//    height: 100%;
+//    background: linear-gradient(to right,  #cc3f6e 0%,#93004e 100%);
+//  }
+//}
+//
+//
+//.iScrollVerticalScrollbar {
+//  position: absolute;
+//  z-index: 9999;
+//  width: 16px;
+//  bottom: 2px;
+//  top: 2px;
+//  right: 2px;
+//  overflow: hidden;
+//  .iScrollBothScrollbars{
+//    bottom: 18px;
+//  }
+//  .iScrollIndicator {
+//    width: 100%;
+//    background: linear-gradient(to bottom,  #cc3f6e 0%,#93004e 100%);
+//  }
+//}
+//
+//.iScrollIndicator {
+//  position: absolute;
+//  background: #cc3f6e;
+//  border-width: 1px;
+//  border-style: solid;
+//  border-color: #EB97B4 #7C2845 #7C2845 #EB97B4;
+//  border-radius: 8px;
+//}

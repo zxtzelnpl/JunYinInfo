@@ -1,0 +1,56 @@
+extends ../admin/layout
+
+block css
+
+block content
+    .row
+        form.form-horizontal(method="POST" action="/admin/user/signup")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpName") 用户名：
+                div.col-sm-4
+                    input.form-control(id="signUpName" name="user[name]" type="text")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpNickName") 昵称：
+                div.col-sm-4
+                    input.form-control(id="signUpNickName" name="user[nickName]" type="text")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpPassword") 密码：
+                div.col-sm-4
+                    input.form-control(id="signUpPassword" name="user[password]" type="text")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpPhone") 手机：
+                div.col-sm-4
+                    input.form-control(id="signUpPhone" name="user[phone]" type="text")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpEmail") 邮箱：
+                div.col-sm-4
+                    input.form-control(id="signUpEmail" name="user[email]" type="text")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label 性别：
+                div.col-sm-4
+                    label.radio-inline(for="signUpSexMale")
+                        input(id="signUpSexMale" name="user[sex]" type="radio" value="male")
+                        | 男
+                    label.radio-inline(for="signUpSexFemale")
+                        input(id="signUpSexFemale" name="user[sex]" type="radio" value="female")
+                        | 女
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpLevel") 等级：
+                div.col-sm-4
+                    input.form-control(id="signUpLevel" name="user[level]" type="number")
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="signUpBelong") 所属直播室：
+                div.col-sm-4
+                    mixin option(value,title)
+                        option(value=value)=title
+                    select.form-control(id="signUpBelong" name="user[room]")
+                        option(value='')='请选择'
+                        each val in rooms
+                            +option(val._id,val.title)
+            div.form-group
+                div.col-sm-offset-5.col-sm-2.text-center
+                    input.btn.btn-success(id="submit" type="submit" value="提交")
+                div.col-sm-2.text-center
+                    input.btn.btn-warning(id="reset" type="reset" value="重置")
+
+block js

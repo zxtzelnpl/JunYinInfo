@@ -1,0 +1,56 @@
+doctype
+html
+    head
+        meta(charset="utf-8")
+        title #{title}
+        link(rel="stylesheet",href="/admin/css/bootstrap.min.css")
+        block css
+    body
+        .container
+            .row
+                .col-sm-2
+                    if user&&parseInt(user.level)>=1000
+                        .row
+                            .col-sm-12
+                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-user.label.label-default#userName #{user.name}
+                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-signal.label.label-default#userLevel #{user.level}
+                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-flag.label.label-default#userBelong #{user.belong}
+                                a#signOut.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-danger.btn-sm 登出
+                        .row
+                            .col-sm-12
+                                ul.nav.nav-pills.nav-stacked.text-center
+                                    li(role="presentation")
+                                        a.collapsed(data-toggle="collapse" href="#roomlist" role="button" aria-haspopup="true" aria-expanded="false")
+                                            | 房间管理
+                                            span.caret
+                                        ul#roomlist.collapse
+                                            li: a(role="button" href="/admin/roomlist") 房间列表
+                                            li: a(role="button" href="/admin/roomnew") 新增房间
+                                    li(role="presentation").dropdown
+                                        a.collapsed(data-toggle="collapse" href="#userlist" role="button" aria-haspopup="true" aria-expanded="false")
+                                            | 用户管理
+                                            span.caret
+                                        ul#userlist.collapse
+                                            li: a(role="button" href="/admin/userlist/1") 用户列表
+                                            li: a(role="button" href="/admin/usersearch") 用户查询
+                                            li: a(role="button" href="/admin/usersignup") 用户注册
+                                    li(role="presentation")
+                                        a.collapsed(data-toggle="collapse" href="#picturelist" role="button" aria-haspopup="true" aria-expanded="false")
+                                            | 图片管理
+                                            span.caret
+                                        ul#picturelist.collapse
+                                            li: a(role="button" href="/admin/pictureroom/all") 图片列表
+                                            li: a(role="button" href="/admin/pictureupload") 图片上传
+                                    li(role="presentation")
+                                        a.collapsed(data-toggle="collapse" href="#messagelist" role="button" aria-haspopup="true" aria-expanded="false")
+                                            | 聊天管理
+                                            span.caret
+                                        ul#messagelist.collapse
+                                            li: a(role="button" href="/admin/messagelist/1") 信息列表
+                                            li: a(role="button" href="/admin/messagesearch") 信息查询
+                .col-sm-10
+                    block content
+    script(src="/js/jquery.js")
+    script(src="/admin/js/bootstrap.js")
+    script(src="/admin/js/everyone.js")
+    block js

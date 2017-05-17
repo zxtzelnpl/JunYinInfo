@@ -1,0 +1,60 @@
+doctype
+html
+    head
+        meta(charset="utf-8")
+        title #{title}
+        link(rel="stylesheet",href="/css/index.css")
+        link(rel="stylesheet",href="/css/normalize.css")
+        script(src="/js/jquery.js")
+        script(src="/js/vendor.js")
+    body
+        input(id="INITIAL_STATE_LOG" type="hidden" value=user.name)
+        script.
+            var iUser = {
+                name: "#{user.name}"
+            };
+
+
+        script.
+            function iMap() {
+                Object.defineProperty(this, 'length', {
+                    enumerable: false,
+                    configurable: false,
+                    writable: true,
+                    value: 0
+                })
+            }
+            Object.defineProperties(iMap.prototype, {
+                'set': {
+                    enumerable: false,
+                    configurable: false,
+                    writable: false,
+                    value: function (obj) {
+                        if (this[obj._id] === undefined) {
+                            this.length++;
+                        }
+                        this[obj._id] = obj;
+                    }
+                },
+                'del': {
+                    enumerable: false,
+                    configurable: false,
+                    writable: false,
+                    value: function (obj) {
+                        console.log(obj);
+                        if (this[obj._id]) {
+                            console.log(this[obj._id])
+                            delete this[obj._id];
+                            this.length--;
+                        }
+                    }
+                }
+            });
+            var INITIAL_STATE_MES_ORIGN = ("#{messages}")?JSON.parse(("#{messages}".replace(/&quot;/ig, '\"'))):[];
+            var INITIAL_STATE_MES = new iMap()
+            INITIAL_STATE_MES_ORIGN.forEach(function(message){
+                INITIAL_STATE_MES.set(message);
+            })
+        div(id="app")
+        script(src="/socket.io/socket.io.js")
+        script(src="/js/index.js")

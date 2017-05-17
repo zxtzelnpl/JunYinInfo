@@ -1,0 +1,53 @@
+extends ../admin/layout
+
+block css
+
+block content
+    .row
+        table.table.table-hover.table-bordered
+            thead
+                tr
+                    th 用户
+                    th 内容
+                    th 发言时间
+                    th 房间
+                    th 审核人
+                    th 审核时间
+                    th 审核
+                    th 删除
+            tbody
+                if messages && messages.length > 0
+                    each message in messages
+                        tr(class="item-id-" + message._id)
+                            if message.from&&message.from.name
+                                td #{message.from.name}
+                            else
+                                td 已被删除用户
+                            td #{message.content}
+                            td #{moment(message.createAt).format('HH:MM-MM/DD/YYYY')}
+                            if message.room&&message.room.title
+                                td #{message.room.title}
+                            else
+                                td 未知
+                            if message.check
+                                if message.verifier&&message.verifier.name
+                                    td #{message.verifier.name}
+                                else
+                                    td 未知审核人员
+                                td #{moment(message.updateAt).format('MM/DD/YYYY-HH:MM')}
+                                td 已经审核通过
+                            else
+                                td 暂未审核
+                                td 暂未审核
+                                td: button.btn.btn-success.success(type="button", data-id=message._id) 审核
+                            td: button.btn.btn-danger.del(type="button", data-id=message._id) 删除
+    .row
+        div
+            ul#page.pagination
+                - var n=1
+                while n <= totalPageNum
+                    li: a(href="/admin/messagelist/" + n)=n++
+
+block js
+    script(src="/socket.io/socket.io.js")
+    script(src="/admin/js/messageList.js")
