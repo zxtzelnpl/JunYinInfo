@@ -204,6 +204,8 @@ exports.userSearch = function (req, res) {
         .then(function (results) {
             res.render('searchMesList', {
                 title: '留言列表',
+                timeStart:req.body.search['timeStart'],
+                timeEnd:req.body.search['timeEnd'],
                 users: results[2],
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
