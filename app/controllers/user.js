@@ -5,7 +5,7 @@ const pageSize = 20;
 exports.userList = function (req, res) {
     let pageNum = req.params.page;
     let totalPageNum;
-    UserModel.find({}).count(function (err, count) {
+    UserModel.find({level:'1000'}).count(function (err, count) {
         totalPageNum = Math.ceil(count / pageSize);
         UserModel.find({})
             .skip((pageNum - 1) * pageSize)
@@ -25,18 +25,9 @@ exports.userList = function (req, res) {
 };
 
 exports.userSignUp = function (req, res) {
-    RoomModel
-        .find({})
-        .select('name title')
-        .exec(function (err, rooms) {
-            if (err) {
-                console.log(err)
-            }
-            res.render('userSignUp', {
-                title: '用户注册',
-                rooms: rooms
-            });
-        });
+    res.render('userSignUp', {
+        title: '用户注册'
+    });
 };
 
 exports.userDetail = function (req, res) {
@@ -135,29 +126,13 @@ exports.userQuery = function (req, res) {
 exports.signUp = function (req, res) {
     let user;
     let _user = req.body.user;
-    if(_user.room===''){
-        delete _user.room;
-    }
-    UserModel.find({"$or": [{'name': _user.name}, {'phone': _user.phone}]}, function (err, users) {
+    user = new UserModel(_user);
+    user.save(function (err, user) {
         if (err) {
-            console.log(err);
+            console.log(err)
         }
-        if (users.length === 0) {
-            user = new UserModel(_user);
-            user.save(function (err, user) {
-                if (err) {
-                    console.log(err)
-                }
-                res.redirect('/admin/userdetail/' + user._id)
-            })
-        } else {
-            if (users[0].name === _user.name) {
-                res.redirect('/admin/information/name')
-            } else if (users[0].phone == _user.phone) {
-                res.redirect('/admin/information/phone')
-            }
-        }
-    });
+        res.redirect('/admin/userdetail/' + user._id)
+    })
 };
 
 exports.update = function (req, res) {

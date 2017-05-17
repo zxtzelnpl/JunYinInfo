@@ -15,7 +15,7 @@ let UserSchema = new Schema({
     , email: String
     , sex: String
     , way:String
-    , message:String
+    , leaveMes:String
     , level: {
         type: String
         , default: 0
@@ -45,18 +45,22 @@ UserSchema.pre('save', function (next) {
     } else {
         user.updateAt = Date.now();
     }
-    bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
-        if (err) {
-            return next(err)
-        }
-        bcrypt.hash(user.password, salt, function (err, hash) {
+    if(user.password){
+        bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
             if (err) {
                 return next(err)
             }
-            user.password = hash;
-            next()
+            bcrypt.hash(user.password, salt, function (err, hash) {
+                if (err) {
+                    return next(err)
+                }
+                user.password = hash;
+                next()
+            })
         })
-    })
+    }else{
+        next();
+    }
 });
 
 UserSchema.methods = {

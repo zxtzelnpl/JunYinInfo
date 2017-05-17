@@ -39,15 +39,6 @@ block content
                 div.col-sm-4
                     input.form-control(id="signUpLevel" name="user[level]" type="number")
             div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpBelong") 所属直播室：
-                div.col-sm-4
-                    mixin option(value,title)
-                        option(value=value)=title
-                    select.form-control(id="signUpBelong" name="user[room]")
-                        option(value='')='请选择'
-                        each val in rooms
-                            +option(val._id,val.title)
-            div.form-group
                 div.col-sm-offset-5.col-sm-2.text-center
                     input.btn.btn-success(id="submit" type="submit" value="提交")
                 div.col-sm-2.text-center

@@ -64,29 +64,21 @@ exports.messageList = function (req, res) {
 
 
 /**save聊天信息start*/
-exports.save = function (msg, user, next) {
-    let _message = {
-        from: {}
-    };
-    _message.from = user._id;
-    _message.content = msg.content;
-    _message.room = msg.room;
-
-    let message = new MessageModel(_message);
+exports.save = function (msg, next) {
+    let message = new MessageModel(msg);
     message.save(function (err, message) {
         if (err) {
             console.log(err);
         }
-        next(
-            {
-                _id: message._id
-                , from: {
-                name: user.name
+        message.populate('from',function(err,message){
+            if (err) {
+                console.log(err);
             }
-                , content: message.content
-                , createAt: message.createAt
-            }
-        )
+            next(
+                message
+            )
+        });
+
     })
 };
 /**save聊天信息end*/

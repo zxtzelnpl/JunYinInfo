@@ -3,46 +3,45 @@ import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 
 import Chat from './components/Chat';
+import LeaveMessage from './components/LeaveMessage';
 
 import reducer from './reducers';
 import {Provider} from 'react-redux';
 
-import {messages,onlines} from './actions';
+import {messages} from './actions';
 
 import socket from './socket/socket';
 
 const store = createStore(reducer);
 
-
-if(iUser.level<999){
-    socket.on('selfBack',function(msg){
-        store.dispatch(messages(msg,'BACK'));
-    })
-}else{
-    socket.on('message',function(msg){
-        store.dispatch(messages(msg,'ADD'));
+if(belongId){
+    socket.on(belongId,function(message){
+        console.log(message);
+        store.dispatch(messages(message,'ADD'))
     });
 }
-socket.on('checkedMessage',function(msg){
-    store.dispatch(messages(msg,'CHECK'))
-});
-socket.on('delMessage',function(msg){
-    store.dispatch(messages(msg,'DEL'))
-});
-
-socket.on('online',function(msg){
-  store.dispatch(onlines(msg))
-});
 
 const render = () => {
-  console.log(store.getState());
-  ReactDOM.render(
-    <Provider store={store}>
-      <Chat />
-    </Provider>, document.getElementById('app')
-  )
-};
+    console.log(store.getState());
 
+    let html;
+    if(fromId&&belongId){
+        html=(<Chat />)
+    }else{
+        html=(<div>
+            <LeaveMessage />
+            <Chat />
+        </div>)
+    }
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <div>
+                {html}
+            </div>
+        </Provider>, document.getElementById('app')
+    )
+};
 
 
 render();

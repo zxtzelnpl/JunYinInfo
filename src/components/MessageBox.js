@@ -5,49 +5,14 @@ import socket from '../socket/socket';
 
 function Message({message,check,del}) {
     let DOMStr;
-    let DOMcheck;
-    let ClassStr='item-'+message._id;
-    if(!message.from||!message.from.name){
-        message.from={
-            name:'路人'
-        }
-    }
-    if(iUser.level>999){
-        if(message.check){
-            DOMcheck=(
-                <div className="manage">
-                    <a className="del" onClick={del.bind(null,message._id)}>删除</a>
-                </div>
-            );
-        }else{
-            DOMcheck=
-                (
-                    <div className="manage">
-                        <a className="check" onClick={check.bind(null,message._id)}>审核</a>
-                        <a className="del" onClick={del.bind(null,message._id)}>删除</a>
-                    </div>
-                )
-        }
-
-        DOMStr=
-            (
-                <li className="message">
-                    <div className="name">{message.from.name}:</div>
-                    <div className="time">{new Date(message.createAt).toLocaleString()}</div>
-                    <div className="content">{message.content}</div>
-                    {DOMcheck}
-                </li>
-            )
-    }else{
-        DOMStr=
-            (
-                <li className="message">
-                    <div className="name">{message.from.name}:</div>
-                    <div className="time">{new Date(message.createAt).toLocaleString()}</div>
-                    <div className="content">{message.content}</div>
-                </li>
-            )
-    }
+    DOMStr=
+        (
+            <li className="message">
+                <div className="name">{message.from.nickName}:</div>
+                <div className="time">{new Date(message.createAt).toLocaleString()}</div>
+                <div className="content">{message.content}</div>
+            </li>
+        );
     return DOMStr;
 }
 

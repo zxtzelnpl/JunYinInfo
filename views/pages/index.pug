@@ -8,13 +8,18 @@ html
         script(src="/js/jquery.js")
         script(src="/js/vendor.js")
     body
-        input(id="INITIAL_STATE_LOG" type="hidden" value=user.name)
-        script.
-            var iUser = {
-                name: "#{user.name}"
-            };
-
-
+        if(belongId)
+            script.
+                var fromId = "#{user._id}";
+                var belongId = "#{belongId}";
+        else if(user)
+            script.
+                var fromId = "#{user._id}";
+                var belongId = "#{user._id}";
+        else
+            script.
+                var fromId = "";
+                var belongId = "";
         script.
             function iMap() {
                 Object.defineProperty(this, 'length', {
@@ -54,7 +59,7 @@ html
             var INITIAL_STATE_MES = new iMap()
             INITIAL_STATE_MES_ORIGN.forEach(function(message){
                 INITIAL_STATE_MES.set(message);
-            })
+            });
         div(id="app")
         script(src="/socket.io/socket.io.js")
         script(src="/js/index.js")

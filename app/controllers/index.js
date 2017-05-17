@@ -1,20 +1,25 @@
 const MessageModel = require('../models/message');
-const PageSize = 30;
 
 exports.index = function (req, res) {
+    let userId = req.session.user ? req.session.user._id : undefined;
+    if(!userId){
+        res.render('index', {
+            title:'咨询页面',
+            messages: ''
+        });
+        return;
+    }
+
     let promiseMessages = new Promise(function (resolve, reject) {
-        let userId = req.session.user ? req.session.user._id : undefined;
-        let optFind = {from: userId};
-        let optField = ['_id', 'from', 'beLong', 'content', 'createAt'];
-        let optPopulate1 = {path: 'from', select: 'name -_id'};
-        let optPopulate2 = {path: 'beLong', select: 'name -_id'};
+
+        let optFind = {belong: userId};
+        let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
+        let optPopulate = {path: 'from', select: 'nickName -_id'};
 
         MessageModel
             .find(optFind, optField)
             .sort({_id: -1})
-            .limit(PageSize)
-            .populate(optPopulate1)
-            .populate(optPopulate2)
+            .populate(optPopulate)
             .exec(function (err, messages) {
                 if (err) {
                     reject(err)
@@ -26,6 +31,7 @@ exports.index = function (req, res) {
     promiseMessages
         .then(function (messagesStr) {
             res.render('index', {
+                title:'咨询页面',
                 messages: messagesStr
             });
         })

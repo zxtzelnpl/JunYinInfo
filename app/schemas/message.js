@@ -9,7 +9,7 @@ let MessageSchema = new Schema({
         type: ObjectId
         , ref: 'User'
     }
-    ,beLong:{
+    ,belong:{
         type: ObjectId
         , ref: 'User'
     }

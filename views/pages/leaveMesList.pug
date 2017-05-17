@@ -1,0 +1,36 @@
+extends ../admin/layout
+
+block css
+
+block content
+    .row
+        table.table.table-hover.table-bordered
+            thead
+                tr
+                    th 名称
+                    th 手机
+                    th 留言内容
+                    th 创建时间
+                    th 聊天
+            tbody
+                if users&&users.length>0
+                    each item in users
+                        tr(class="item-id-"+item._id)
+                            td #{item.nickName}
+                            td #{item.phone}
+                            td #{item.leaveMes}
+                            td #{moment(item.createAt).format('MM/DD/YYYY')}
+                            td: a(target="_blank", href= "/way1/chat/"+item._id) 聊天
+    .row
+        div
+            ul#page.pagination
+                - var n=1
+                while n <= totalPageNum
+                    if(n==pageNum)
+                        li: a(class="active" href="/admin/leavemes/"+n)=n++
+                    else
+                        li: a(href="/admin/leavemes/"+n)=n++
+
+
+block js
+
