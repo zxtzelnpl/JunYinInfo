@@ -36,6 +36,10 @@ let UserSchema = new Schema({
         type: Boolean
         , default: false
     }
+    , chat: {
+        type: Boolean
+        , default: false
+    }
 });
 
 UserSchema.pre('save', function (next) {

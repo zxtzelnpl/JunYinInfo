@@ -1,10 +1,11 @@
 const MessageModel = require('../models/message');
+const ClickCountModel = require('../models/clickCount');
 
 exports.index = function (req, res) {
     let userId = req.session.user ? req.session.user._id : undefined;
-    if(!userId){
+    if (!userId) {
         res.render('index', {
-            title:'咨询页面',
+            title: '咨询页面',
             messages: ''
         });
         return;
@@ -28,11 +29,21 @@ exports.index = function (req, res) {
             });
     });
 
-    promiseMessages
-        .then(function (messagesStr) {
+    let promiseClickCount = new Promise(function (resolve, reject) {
+        let clickCount = new ClickCountModel({name: 'count'});
+        clickCount.save(function (err, clickCount) {
+            if (err) {
+                console.log(err)
+            }
+            resolve(clickCount)
+        })
+    });
+
+    Promise.all([promiseMessages, promiseClickCount])
+        .then(function (results) {
             res.render('index', {
-                title:'咨询页面',
-                messages: messagesStr
+                title: '咨询页面',
+                messages: results[0]
             });
         })
         .catch(function (err) {
@@ -41,6 +52,7 @@ exports.index = function (req, res) {
                 err: err
             })
         });
+
 };
 
 exports.test = function (req, res) {

@@ -25,6 +25,7 @@ exports.leaveMes = function (req, res) {
 exports.userList = function(req,res){
     let pageNum = req.params.pageNum;
     let totalPageNum;
+    let totalNum;
     let optFind={level:0};
     UserModel.find(optFind).count(function (err, count) {
         totalPageNum = Math.ceil(count / pageSize);
@@ -40,8 +41,8 @@ exports.userList = function(req,res){
                     title: '留言列表',
                     users: users,
                     totalPageNum: totalPageNum,
-                    pageNum:pageNum
-
+                    pageNum:pageNum,
+                    totalNum:count
                 });
             });
     });

@@ -65,21 +65,40 @@ exports.messageList = function (req, res) {
 
 /**save聊天信息start*/
 exports.save = function (msg, next) {
-    let message = new MessageModel(msg);
-    message.save(function (err, message) {
-        if (err) {
-            console.log(err);
-        }
-        message.populate('from',function(err,message){
+    let savePromise=new Promise(function(resolve,reject){
+        let message = new MessageModel(msg);
+        message.save(function (err, message) {
             if (err) {
-                console.log(err);
+                reject(err);
             }
-            next(
-                message
-            )
-        });
+            resolve(message);
+        })
+    });
 
-    })
+    let leaveMesPromise= new Promise(function(resolve,reject){
+        UserModel.findByIdAndUpdate(msg.belongId,{$set:{chat:true}},function(err,user){
+            if(err){
+                reject(err);
+            }
+            resolve(user)
+        })
+    });
+
+    let populatePromise=savePromise.then(function(message){
+       return new Promise (function(resolve,reject){
+           message.populate('from',function(err,message){
+               if (err) {
+                   reject(err);
+               }
+               resolve(message)
+           });
+       })
+    });
+
+    Promise.all([populatePromise,leaveMesPromise]).then(function(results){
+        next(results[0])
+    });
+
 };
 /**save聊天信息end*/
 
