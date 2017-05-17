@@ -17,7 +17,7 @@ let UserSchema = new Schema({
     , way:String
     , leaveMes:String
     , level: {
-        type: String
+        type: Number
         , default: 0
     }
     ,online:{

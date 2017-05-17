@@ -65,7 +65,7 @@ exports.messageList = function (req, res) {
 
 /**save聊天信息start*/
 exports.save = function (msg, next) {
-    let savePromise=new Promise(function(resolve,reject){
+    let save=new Promise(function(resolve,reject){
         let message = new MessageModel(msg);
         message.save(function (err, message) {
             if (err) {
@@ -76,7 +76,7 @@ exports.save = function (msg, next) {
     });
 
     let leaveMesPromise= new Promise(function(resolve,reject){
-        UserModel.findByIdAndUpdate(msg.belongId,{$set:{chat:true}},function(err,user){
+        UserModel.findByIdAndUpdate(msg.belong,{$set:{chat:true}},function(err,user){
             if(err){
                 reject(err);
             }
@@ -84,7 +84,7 @@ exports.save = function (msg, next) {
         })
     });
 
-    let populatePromise=savePromise.then(function(message){
+    let populatePromise=save.then(function(message){
        return new Promise (function(resolve,reject){
            message.populate('from',function(err,message){
                if (err) {

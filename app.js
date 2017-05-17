@@ -2,10 +2,10 @@ const fs=require('fs');
 
 /**定义常量**/
 const port = process.env.PORT || 3000;
-const dbUrl = 'mongodb://localhost/info';
+// const dbUrl = 'mongodb://localhost/info';
 // const dbUrl = 'mongodb://localhost:3883/junyin';
 // const dbUrl = 'mongodb://superuser:123@localhost:3883/junyin';
-// const dbUrl = 'mongodb://zxt:123@localhost:3883/junyin';
+const dbUrl = 'mongodb://zxt:123@localhost:3883/info';
 const secret='info';
 
 /**引如外部**/

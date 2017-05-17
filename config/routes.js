@@ -19,7 +19,11 @@ module.exports = function (app, io) {
     app.get('/', Index.index);
     app.get('/way1/chat/:id',Way1.chat);
     app.post('/way1/leaveMes', Way1.leaveMes);
+    app.post('/way1/direct', Way1.direct);
     app.get('/test', Index.test);
+
+    /*LeaveMes*/
+    app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userList);
 
     /*User*/
     app.post('/user/signin', User.signIn);
@@ -32,8 +36,7 @@ module.exports = function (app, io) {
     app.get('/admin/login', Admin.admin);
 
 
-    /*LeaveMes*/
-    app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userList);
+
 
     /*Admin-User*/
     app.get('/admin/userlist/:page', Admin.adminRequired, User.userList);

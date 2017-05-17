@@ -32,6 +32,24 @@ class LeaveMessage extends React.Component{
         })
     }
 
+    handleClose(){
+        $.ajax({
+            type:'POST',
+            url:'/way1/direct',
+            data:{},
+            success:(data)=>{
+                if (data.state === 'success') {
+                    console.log('success')
+                }else{
+                    console.log('获取数据失败，请稍后再试')
+                }
+            },
+            error:()=>{
+                console.log('获取数据失败，请稍后再试')
+            }
+        })
+    }
+
     handleChange(e){
         if(e.target.id==='nickName'){
             this.setState({
@@ -92,7 +110,7 @@ class LeaveMessage extends React.Component{
                     <a href="javascript:void(0)" onClick={this.handleClick.bind(this)}>
                         提交
                     </a>
-                    <a href="javascript:void(0)">
+                    <a href="javascript:void(0)" onClick={this.handleClose.bind(this)}>
                         关闭
                     </a>
                 </div>

@@ -34,7 +34,6 @@ exports.userSignUp = function (req, res) {
 exports.userDetail = function (req, res) {
     let _id = req.params.id;
     UserModel.findOne({_id: _id})
-        .populate('room', 'title')
         .exec(function (err, user) {
             res.render('userDetail', {
                 user: user,
