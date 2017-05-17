@@ -1,13 +1,14 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message.js');
 const pageSize = 20;
+const optFind={'level':'1000'};
 
 exports.userList = function (req, res) {
     let pageNum = req.params.page;
     let totalPageNum;
-    UserModel.find({level:'1000'}).count(function (err, count) {
+    UserModel.find(optFind).count(function (err, count) {
         totalPageNum = Math.ceil(count / pageSize);
-        UserModel.find({})
+        UserModel.find(optFind)
             .skip((pageNum - 1) * pageSize)
             .limit(pageSize)
             .populate('room', 'title')
@@ -48,19 +49,10 @@ exports.userUpdate = function (req, res) {
         .findOne({_id: _id})
         .populate('room', 'title')
         .exec(function (err, user) {
-            RoomModel
-                .find({})
-                .select('name title')
-                .exec(function (err, rooms) {
-                    if (err) {
-                        console.log(err)
-                    }
-                    res.render('userUpdate', {
-                        title: user.name + '信息修改',
-                        user: user,
-                        rooms: rooms
-                    });
-                });
+            res.render('userUpdate', {
+                title: user.name + '信息修改',
+                user: user
+            });
         });
 };
 

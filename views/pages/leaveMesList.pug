@@ -19,7 +19,7 @@ block content
                             td #{item.nickName}
                             td #{item.phone}
                             td #{item.leaveMes}
-                            td #{moment(item.createAt).format('MM/DD/YYYY')}
+                            td #{moment(item.createAt).format('YYYY年MM月DD日-HH:mm:ss')}
                             td: a(target="_blank", href= "/way1/chat/"+item._id) 聊天
     .row
         div

@@ -19,20 +19,12 @@ html
                         .row
                             .col-sm-12
                                 ul.nav.nav-pills.nav-stacked.text-center
-                                    li(role="presentation")
-                                        a.collapsed(data-toggle="collapse" href="#roomlist" role="button" aria-haspopup="true" aria-expanded="false")
-                                            | 房间管理
-                                            span.caret
-                                        ul#roomlist.collapse
-                                            li: a(role="button" href="/admin/roomlist") 房间列表
-                                            li: a(role="button" href="/admin/roomnew") 新增房间
                                     li(role="presentation").dropdown
                                         a.collapsed(data-toggle="collapse" href="#userlist" role="button" aria-haspopup="true" aria-expanded="false")
                                             | 用户管理
                                             span.caret
                                         ul#userlist.collapse
                                             li: a(role="button" href="/admin/userlist/1") 用户列表
-                                            li: a(role="button" href="/admin/usersearch") 用户查询
                                             li: a(role="button" href="/admin/usersignup") 用户注册
                                     li(role="presentation")
                                         a.collapsed(data-toggle="collapse" href="#messagelist" role="button" aria-haspopup="true" aria-expanded="false")
