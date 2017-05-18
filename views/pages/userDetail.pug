@@ -26,11 +26,8 @@ block content
                         td.text-right 等级：
                         td #{user.level}
                     tr
-                        td.text-right 所属公司：
-                        if(user.room&&user.room.title)
-                            td #{user.room.title}
-                        else
-                            td 未分配
+                        td.text-right 渠道：
+                        td #{user.way}
                     tr
                         td.text-right 是否被禁用：
                         td #{user.forbidden}

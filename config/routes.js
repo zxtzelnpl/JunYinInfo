@@ -4,7 +4,9 @@ const Index = require('../app/controllers/index');
 const User = require('../app/controllers/user');
 const Message = require('../app/controllers/message');
 const Admin = require('../app/controllers/admin');
+const Visit = require('../app/controllers/visit');
 const Way1 = require('../app/controllers/way1');
+const Way2 = require('../app/controllers/way2');
 
 const UserModule = require('../app/models/user.js');
 
@@ -15,16 +17,33 @@ module.exports = function (app, io) {
         next();
     });
 
-    /*Way1*/
-    app.get('/', Index.index);
-    app.get('/way1/chat/:id',Way1.chat);
-    app.post('/way1/leaveMes', Way1.leaveMes);
-    app.post('/way1/direct', Way1.direct);
-    app.get('/test', Index.test);
+    /*自动回复*/
+    app.get('/autoplay',Visit.autoReplay);
 
-    /*LeaveMes*/
-    app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userList);
-    app.post('/admin/leavemes/:pageNum',Admin.adminRequired,Way1.userSearch);
+    /*Way1*/
+    app.get('/way/way1', Way1.index);
+    app.post('/way/leaveMes/way1', Way1.leaveMes);
+    app.post('/way/direct/way1', Way1.direct);
+    /*LeaveMes-All*/
+    app.get('/way1/leavemes/:pageNum',Admin.adminRequired,Way1.userList);
+    app.post('/way1/leavemes/:pageNum',Admin.adminRequired,Way1.userSearch);
+
+    /*Way2*/
+    app.get('/way/way2', Way2.index);
+    app.post('/way/leaveMes/way2', Way2.leaveMes);
+    app.post('/way/direct/way2', Way2.direct);
+    /*LeaveMes-All*/
+    app.get('/way2/leavemes/:pageNum',Admin.adminRequired,Way2.userList);
+    app.post('/way2/leavemes/:pageNum',Admin.adminRequired,Way2.userSearch);
+
+    /*咨询页面管理*/
+    app.get('/admin/user/finish',Admin.adminRequired,Visit.finish);
+    app.get('/chat/:id',Admin.adminRequired,Visit.chat);
+
+    /*LeaveMes-All*/
+    app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Visit.userList);
+    app.post('/admin/leavemes/:pageNum',Admin.adminRequired,Visit.userSearch);
+
 
     /*User*/
     app.post('/user/signin', User.signIn);
@@ -36,9 +55,6 @@ module.exports = function (app, io) {
     /*Admin*/
     app.get('/admin/login', Admin.admin);
 
-
-
-
     /*Admin-User*/
     app.get('/admin/userlist/:page', Admin.adminRequired, User.userList);
     app.get('/admin/usersignup', Admin.adminRequired, User.userSignUp);
@@ -49,6 +65,9 @@ module.exports = function (app, io) {
     app.delete('/admin/user/delete', Admin.adminRequired, User.delete);
     app.get('/admin/user/forbidden', Admin.adminRequired, User.forbidden);
 
+    /*Information*/
+    app.get('/admin/information/:information', Admin.adminRequired, Admin.information);
+
     /*Lost*/
     app.get('/admin/usersearch', Admin.adminRequired, User.userSearch);
     app.post('/admin/userquery/:page', Admin.adminRequired, User.userQuery);
@@ -56,8 +75,10 @@ module.exports = function (app, io) {
     app.get('/admin/messagesearch', Admin.adminRequired,Message.messageSearch);
     app.post('/admin/messagequery/:page', Admin.adminRequired, Message.query);
 
-    /*Information*/
-    app.get('/admin/information/:information', Admin.adminRequired, Admin.information);
+    /*Index*/
+    app.get('/test', Index.test);
+
+
 
     /*socket.io*/
     io.on('connection', function (socket) {

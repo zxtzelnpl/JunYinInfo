@@ -26,17 +26,21 @@ let UserSchema = new Schema({
     }
     , createAt: {
         type: Date
-        , default: Date.now
+        , default: Date.now()
     }
     , updateAt: {
         type: Date
-        , default: Date.now
+        , default: Date.now()
     }
     , forbidden: {
         type: Boolean
         , default: false
     }
     , chat: {
+        type: Boolean
+        , default: false
+    }
+    , finish: {
         type: Boolean
         , default: false
     }

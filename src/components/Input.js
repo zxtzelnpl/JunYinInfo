@@ -24,7 +24,7 @@ class Input extends React.Component {
         socket.emit('message', {
             content:content,
             from:fromId,
-            belong:belongId
+            belong:belongId,
         });
     }
 

@@ -1,118 +1,8 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
 const ClickCountModel = require('../models/clickCount');
-const way = 'way1';
+const way = 'admin';
 const pageSize = 20;
-
-exports.index = function (req, res) {
-    let userId = req.session.user ? req.session.user._id : undefined;
-    if (!userId) {
-        res.render('index', {
-            title: '咨询页面',
-            messages: '',
-            way: way
-        });
-        return;
-    }
-
-    let promiseMessages = new Promise(function (resolve, reject) {
-
-        let optFind = {belong: userId};
-        let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
-        let optPopulate = {path: 'from', select: 'nickName -_id'};
-
-        MessageModel
-            .find(optFind, optField)
-            .sort({_id: -1})
-            .populate(optPopulate)
-            .exec(function (err, messages) {
-                if (err) {
-                    reject(err)
-                }
-                resolve(JSON.stringify(messages));
-            });
-    });
-
-    let promiseClickCount = new Promise(function (resolve, reject) {
-        let clickCount = new ClickCountModel({name: way});
-        clickCount.save(function (err, clickCount) {
-            if (err) {
-                console.log(err)
-            }
-            resolve(clickCount)
-        })
-    });
-
-    Promise.all([promiseMessages, promiseClickCount])
-        .then(function (results) {
-            res.render('index', {
-                title: '咨询页面',
-                messages: results[0],
-                way: way
-            });
-        })
-        .catch(function (err) {
-            res.render('wrongWay', {
-                title: '发生错误',
-                err: err
-            })
-        });
-
-};
-
-exports.leaveMes = function (req, res) {
-    let user;
-    let _user = req.body;
-    _user.way = way;
-    console.log(_user);
-
-    user = new UserModel(_user);
-    user.save(function (err, user) {
-        if (err) {
-            console.log(err)
-        }
-        req.session.user = user;
-        res.json({
-            state: 'success',
-            user: user
-        })
-    })
-};
-
-exports.direct = function (req, res) {
-    let user;
-
-    let numPromise = new Promise(function (resolve, reject) {
-        UserModel.find({phone: {$exists: false}}).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        })
-    });
-
-    numPromise.then(function (count) {
-        let _user = {
-            nickName: '匿名' + count
-        };
-        _user.way = way;
-
-        user = new UserModel(_user);
-        user.save(function (err, user) {
-            if (err) {
-                console.log(err)
-            }
-            req.session.user = user;
-            res.json({
-                state: 'success',
-                user: user
-            })
-        })
-    })
-        .catch(function (err) {
-            console.log(err);
-        })
-};
 
 exports.userList = function (req, res) {
     let pageNum = req.params.pageNum;
@@ -120,10 +10,7 @@ exports.userList = function (req, res) {
     let totalNum;
 
     let clickCount = new Promise(function (resolve, reject) {
-        let optFind = {
-            name: way
-        };
-        ClickCountModel.find(optFind).count(function (err, count) {
+        ClickCountModel.find({}).count(function (err, count) {
             if (err) {
                 reject(err)
             }
@@ -132,10 +19,7 @@ exports.userList = function (req, res) {
     });
 
     let listCount = new Promise(function (resolve, reject) {
-        let optFind = {
-            level: 0,
-            way: way
-        };
+        let optFind = {level: 0};
         UserModel.find(optFind).count(function (err, count) {
             if (err) {
                 reject(err)
@@ -145,10 +29,7 @@ exports.userList = function (req, res) {
     });
 
     let lists = listCount.then(function (count) {
-        let optFind = {
-            level: 0,
-            way: way
-        };
+        let optFind = {level: 0};
         return new Promise(function (resolve, reject) {
             totalPageNum = Math.ceil(count / pageSize);
             UserModel
@@ -167,11 +48,7 @@ exports.userList = function (req, res) {
     });
 
     let chatCount = new Promise(function (resolve, reject) {
-        let optFind = {
-            level: 0,
-            chat: true,
-            way: way
-        };
+        let optFind = {level: 0,chat:true};
         UserModel.find(optFind).count(function (err, count) {
             if (err) {
                 reject(err)
@@ -210,25 +87,28 @@ exports.userSearch = function (req, res) {
     let timeStart = new Date(req.body.search['timeStart']);
     let timeEnd = new Date(req.body.search['timeEnd']);
 
+
+
     let clickCount = new Promise(function (resolve, reject) {
-        ClickCountModel.find({
-            name: way,
+        let optFind = {
             createAt: {
                 "$gte": timeStart,
                 "$lt": timeEnd
             }
-        }).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        })
+        };
+        ClickCountModel
+            .find(optFind)
+            .count(function (err, count) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(count);
+            })
     });
 
     let listCount = new Promise(function (resolve, reject) {
         let optFind = {
             level: 0,
-            way: way,
             createAt: {
                 "$gte": timeStart,
                 "$lt": timeEnd
@@ -245,7 +125,6 @@ exports.userSearch = function (req, res) {
     let lists = listCount.then(function (count) {
         let optFind = {
             level: 0,
-            way: way,
             createAt: {
                 "$gte": timeStart,
                 "$lt": timeEnd
@@ -256,7 +135,6 @@ exports.userSearch = function (req, res) {
             UserModel.find(optFind)
                 .skip((pageNum - 1) * pageSize)
                 .limit(pageSize)
-                .populate('room', 'title')
                 .exec(function (err, users) {
                     if (err) {
                         reject(err)
@@ -267,23 +145,19 @@ exports.userSearch = function (req, res) {
     });
 
     let chatCount = new Promise(function (resolve, reject) {
-        let optFind = {
-            chat: true,
+        UserModel.find({
             level: 0,
-            way: way,
+            chat: true,
             createAt: {
                 "$gte": timeStart,
                 "$lt": timeEnd
             }
-        };
-        UserModel
-            .find(optFind)
-            .count(function (err, count) {
-                if (err) {
-                    reject(err)
-                }
-                resolve(count);
-            })
+        }).count(function (err, count) {
+            if (err) {
+                reject(err)
+            }
+            resolve(count);
+        })
     });
 
     Promise
@@ -308,4 +182,64 @@ exports.userSearch = function (req, res) {
             console.log(err);
         })
     ;
+};
+
+exports.chat = function (req, res) {
+    let userId = req.params.id;
+
+    let promiseMessages = new Promise(function (resolve, reject) {
+
+        let optFind = {belong: userId};
+        let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
+        let optPopulate = {path: 'from', select: 'nickName -_id'};
+
+        MessageModel
+            .find(optFind, optField)
+            .sort({_id: -1})
+            .populate(optPopulate)
+            .exec(function (err, messages) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(JSON.stringify(messages));
+            });
+    });
+
+    promiseMessages
+        .then(function (messagesStr) {
+            res.render('index', {
+                title: '咨询页面',
+                messages: messagesStr,
+                belongId: userId
+            });
+        })
+        .catch(function (err) {
+            res.render('wrongWay', {
+                title: '发生错误',
+                err: err
+            })
+        });
+};
+
+exports.finish = function (req, res) {
+    let _id = req.query.id;
+    UserModel
+        .findOne({_id: _id})
+        .exec(function (err, user) {
+            console.log(user);
+            user.finish = true;
+            user.save(function () {
+                res.json({
+                    state: 'success'
+                })
+            })
+        })
+};
+
+exports.autoReplay=function(req,res){
+    let way=req.query.way;
+    res.json({
+        state:'success',
+        content:'这个是一个自动回复'+way
+    })
 };

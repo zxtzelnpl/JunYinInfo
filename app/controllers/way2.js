@@ -1,8 +1,9 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
 const ClickCountModel = require('../models/clickCount');
-const way = 'way1';
+const way = 'way2';
 const pageSize = 20;
+
 
 exports.index = function (req, res) {
     let userId = req.session.user ? req.session.user._id : undefined;
@@ -10,7 +11,7 @@ exports.index = function (req, res) {
         res.render('index', {
             title: '咨询页面',
             messages: '',
-            way: way
+            way:way
         });
         return;
     }
@@ -48,7 +49,7 @@ exports.index = function (req, res) {
             res.render('index', {
                 title: '咨询页面',
                 messages: results[0],
-                way: way
+                way:way
             });
         })
         .catch(function (err) {
@@ -59,6 +60,7 @@ exports.index = function (req, res) {
         });
 
 };
+
 
 exports.leaveMes = function (req, res) {
     let user;

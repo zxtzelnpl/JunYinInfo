@@ -17,7 +17,7 @@ class LeaveMessage extends React.Component{
         console.log(me.state);
         $.ajax({
             type:'POST',
-            url:'/way1/leaveMes',
+            url:'/way/leaveMes/'+way,
             data:me.state,
             success:(data)=>{
                 if (data.state === 'success') {
@@ -35,7 +35,7 @@ class LeaveMessage extends React.Component{
     handleClose(){
         $.ajax({
             type:'POST',
-            url:'/way1/direct',
+            url:'/way/direct/'+way,
             data:{},
             success:(data)=>{
                 if (data.state === 'success') {

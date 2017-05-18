@@ -4,6 +4,7 @@ import {createStore} from 'redux';
 
 import Chat from './components/Chat';
 import LeaveMessage from './components/LeaveMessage';
+import AutoReplay from './components/AutoReplay';
 
 import reducer from './reducers';
 import {Provider} from 'react-redux';
@@ -14,10 +15,10 @@ import socket from './socket/socket';
 
 const store = createStore(reducer);
 
-if(belongId){
-    socket.on(belongId,function(message){
+if (belongId) {
+    socket.on(belongId, function (message) {
         console.log(message);
-        store.dispatch(messages(message,'ADD'))
+        store.dispatch(messages(message, 'ADD'))
     });
 }
 
@@ -25,13 +26,21 @@ const render = () => {
     console.log(store.getState());
 
     let html;
-    if(fromId&&belongId){
-        html=(<Chat />)
-    }else{
-        html=(<div>
-            <LeaveMessage />
-            <Chat />
-        </div>)
+    if (fromId && belongId) {
+        html = (
+            <div>
+                <Chat />
+                <AutoReplay />
+            </div>
+        )
+    } else {
+        html = (
+            <div>
+                <LeaveMessage />
+                <Chat />
+                <AutoReplay />
+            </div>
+        )
     }
 
     ReactDOM.render(

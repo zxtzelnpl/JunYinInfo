@@ -13,7 +13,7 @@ block content
                     th 邮箱
                     th 性别
                     th 等级
-                    th 所属公司
+                    th 渠道
                     th 是否被禁用
                     th 创建时间
                     th 上次修改时间
@@ -31,10 +31,7 @@ block content
                             td #{item.email}
                             td #{item.sex}
                             td #{item.level}
-                            if(item.room&&item.room.title)
-                                td #{item.room.title}
-                            else
-                                td 未知
+                            td #{item.way}
                             td
                                 if(item.forbidden)
                                     button.btn.btn-success.change(type="button",data-id=item._id) 解禁

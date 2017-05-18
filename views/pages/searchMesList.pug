@@ -9,7 +9,7 @@ block content
         div 对话人数 #{chatCount}
 
     .row
-        form.form-horizontal(method="POST" action="/admin/leavemes/1" target="_self" id="form")
+        form.form-horizontal(method="POST" action="/"+way+"/leavemes/1" target="_self" id="form")
             .form-group
                 label.col-sm-2.col-sm-offset-3.control-label 开始时间：
                 .col-sm-4
@@ -25,20 +25,29 @@ block content
         table.table.table-hover.table-bordered
             thead
                 tr
+                    th 渠道
                     th 名称
                     th 手机
                     th 留言内容
                     th 创建时间
+                    th 最近聊天时间
                     th 聊天
+                    th 完成
             tbody
                 if users&&users.length>0
                     each item in users
                         tr(class="item-id-"+item._id)
+                            td #{item.way}
                             td #{item.nickName}
                             td #{item.phone}
                             td #{item.leaveMes}
-                            td #{moment(item.createAt).format('YYYY年MM月DD日-HH:mm:ss')}
-                            td: a(target="_blank", href= "/way1/chat/"+item._id) 聊天
+                            td #{moment(item.createAt).format('YYYY-MM-DD--HH:mm:ss')}
+                            td #{moment(item.updateAt).format('YYYY-MM-DD--HH:mm:ss')}
+                            td: a.btn.btn-success.btn-sm(target="_blank", href= "/chat/"+item._id) 聊天
+                            if(item.finish)
+                                td: a 已经完成
+                            else
+                                td: a.btn.btn-danger.btn-sm.finish(data-id=item._id) 点击完成
     .row
         div
             ul#page.pagination
@@ -52,4 +61,5 @@ block content
 
 block js
     script(src="/admin/js/leaveMesList.js")
+    script(src="/admin/js/searchMesList.js")
 

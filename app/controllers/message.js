@@ -76,12 +76,16 @@ exports.save = function (msg, next) {
     });
 
     let leaveMesPromise= new Promise(function(resolve,reject){
-        UserModel.findByIdAndUpdate(msg.belong,{$set:{chat:true}},function(err,user){
-            if(err){
-                reject(err);
-            }
-            resolve(user)
-        })
+        UserModel
+            .findOne({_id: msg.belong})
+            .exec(function (err, user) {
+                if(user.finish){user.finish=false}
+                if(!user.chat){user.chat=true}
+                user.save(function (err,user) {
+                    if(err){reject(err)};
+                    resolve(user)
+                })
+            })
     });
 
     let populatePromise=save.then(function(message){
