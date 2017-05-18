@@ -31,9 +31,12 @@ html
                                             | 聊天管理
                                             span.caret
                                         ul#messagelist.collapse
-                                            li: a(role="button" href="/admin/leavemes/1") 留言列表
-                                            li: a(role="button" href="/way1/leavemes/1") way1留言列表
-                                            li: a(role="button" href="/way2/leavemes/1") way2留言列表
+                                            if(user.level=='10000')
+                                                li: a(role="button" href="/admin/leavemes/1") 留言列表
+                                            if(user.level=='10000'||user.way=='way1')
+                                                li: a(role="button" href="/way1/leavemes/1") way1留言列表
+                                            if(user.level=='10000'||user.way=='way2')
+                                                li: a(role="button" href="/way2/leavemes/1") way2留言列表
                 .col-sm-10
                     block content
     script(src="/js/jquery.js")

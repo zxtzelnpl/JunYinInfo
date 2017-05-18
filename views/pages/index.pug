@@ -2,11 +2,17 @@ doctype
 html
     head
         meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no")
         title #{title}
         link(rel="stylesheet",href="/css/index.css")
         link(rel="stylesheet",href="/css/normalize.css")
         script(src="/js/jquery.js")
         script(src="/js/vendor.js")
+        script.
+            (function () {
+                var deviceWidth = document.documentElement.clientWidth < 640 ? document.documentElement.clientWidth : 640;
+                document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';//750的设计稿
+            })();
     body
         if(belongId)
             script.
@@ -22,7 +28,10 @@ html
                 var belongId = "";
         if(way)
             script.
-                var way="#{way}"
+                var way="#{way}";
+        else
+            script.
+                var way="";
         script.
             function iMap() {
                 Object.defineProperty(this, 'length', {

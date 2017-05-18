@@ -10,17 +10,19 @@ class AutoReplay extends React.Component{
     }
 
     componentDidMount() {
-        $.ajax({
-            url:'/autoplay',
-            data:{
-                way:way
-            }
-        })
-        .done(
-            value => this.setState({data:value})
-        ).fail(
-            error => (console.warn('The request has been rejected'))
-        )
+        if(way!=''){
+            $.ajax({
+                url:'/autoplay',
+                data:{
+                    way:way
+                }
+            })
+                .done(
+                    value => this.setState({data:value})
+                ).fail(
+                error => (console.warn('The request has been rejected'))
+            )
+        }
     }
 
     render(){

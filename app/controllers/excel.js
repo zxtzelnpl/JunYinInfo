@@ -3,7 +3,8 @@ const UserModel = require('../models/user.js');
 
 exports.excel = function (req, res) {
     let way = req.params.way;
-    let query = req.query;
+
+    /*查询条件optFind*/
     let optFind={
             level: 0
         };
@@ -19,7 +20,9 @@ exports.excel = function (req, res) {
             optFind.createAt.$lt=new Date(req.query.end);
         }
     }
-    console.log(query);
+    /*查询条件optFind*/
+
+
     let conf = {};
     conf.name = way;
     conf.cols = [

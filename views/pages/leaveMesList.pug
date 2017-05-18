@@ -4,24 +4,24 @@ block css
 
 block content
     .row
-        div 点击次数 #{clickCount}
-        div 留言人数 #{listCount}
-        div 对话人数 #{chatCount}
+        .col-sm-2
+            div 点击次数 #{clickCount}
+        .col-sm-2
+            div 留言人数 #{listCount}
+        .col-sm-2
+            div 对话人数 #{chatCount}
     .row
-        form.form-horizontal(method="POST" action="/"+way+"/leavemes/1" target="_self")
-            .form-group
-                label.col-sm-2.col-sm-offset-3.control-label 开始时间：
-                .col-sm-4
+        .col-sm-10
+            form.form-inline(method="POST" action="/"+way+"/leavemes/1" target="_self")
+                .form-group
+                    label 开始时间：
                     input.form-control(id="timeStart" name="search[timeStart]" type="date")
-            .form-group
-                label.col-sm-2.col-sm-offset-3.control-label 结束时间：
-                .col-sm-4
+                .form-group
+                    label 结束时间：
                     input.form-control(id="timeEnd" name="search[timeEnd]" type="date")
-            .form-group
-                div.col-sm-offset-5.col-sm-2
-                    button.btn.btn-primary(type="submit") 查询
-    .row
-        a#excel.btn.btn-warning(href="/excel/"+way) 下载EXCEL
+                button.btn.btn-primary(type="submit") 查询
+        .col-sm-2
+            a#excel.btn.btn-warning(href="/excel/"+way) 下载EXCEL
     .row
         table.table.table-hover.table-bordered
             thead
