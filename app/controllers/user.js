@@ -1,7 +1,7 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message.js');
 const pageSize = 20;
-const optFind={'level':'1000'};
+const optFind={'level':1000};
 
 exports.userList = function (req, res) {
     let pageNum = req.params.page;
