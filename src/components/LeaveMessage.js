@@ -70,7 +70,7 @@ class LeaveMessage extends React.Component{
 
     render(){
         return (
-            <div>
+            <div className="leaveMessage">
                 <div className="nickName">
                     <label htmlFor="nickName">
                         姓名：

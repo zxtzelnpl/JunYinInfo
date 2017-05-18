@@ -3,9 +3,9 @@ import $ from 'jquery';
 import IScroll from 'iscroll';
 import socket from '../socket/socket';
 
-function Message({message,check,del}) {
+function Message({message}) {
     let DOMStr;
-    DOMStr=
+    DOMStr =
         (
             <li className="message">
                 <div className="name">{message.from.nickName}:</div>
@@ -22,44 +22,19 @@ class MessageBox extends React.Component {
         this.canMove = 0;
         this.page = 1;
         this.pageLoad = false;
-        this.check=function(id){
-            socket.emit('checkMessage',id)
+        this.check = function (id) {
+            socket.emit('checkMessage', id)
         };
-        this.del=function(id){
-            socket.emit('delMessage',id)
+        this.del = function (id) {
+            socket.emit('delMessage', id)
         };
-    }
-
-    getMoreMessages() {
-        let me = this;
-        let page = me.page;
-
-        $.ajax({
-            type: 'GET'
-            , url: '/message/getmessage'
-            , data: {
-                page
-            }
-            , success: (messages) => {
-                me.pageLoad = true;
-                if(messages.length>0){
-                    me.props.getAll(messages);
-                    me.page++;
-                }else{
-                    alert('已经加载完所有数据')
-                }
-            }
-            , error: () => {
-                console.log('连接失败，请稍后再试')
-            }
-        })
     }
 
     componentDidMount() {
         console.log('componentDidMount');
         let me = this;
-        let innerH = this.messages.scrollHeight;
-        let outerH = this.messagesBox.clientHeight;
+        let innerH = me.messages.scrollHeight;
+        let outerH = me.messagesBox.clientHeight;
         console.log(innerH, outerH);
         let canMove = innerH - outerH;
         console.log(canMove);
@@ -68,23 +43,13 @@ class MessageBox extends React.Component {
         }
         this.canMove = canMove;
         this.myScroll = new IScroll('.messagesBox', {
-            mouseWheel: true
-            , scrollbars: true
-            , interactiveScrollbars: true
-            , startY: -this.canMove
+            startY: -me.canMove
             , resizeScrollbars: true
-        });
-        this.myScroll.on('scrollEnd', function () {
-            if (this.directionY < 0 && this.y == 0) {
-                console.log('加载数据');
-                me.getMoreMessages()
-            }
         });
     }
 
     componentDidUpdate() {
         console.log('componentDidUpdate');
-
 
         let innerH = this.messages.scrollHeight;
         let outerH = this.messagesBox.clientHeight;
@@ -97,10 +62,7 @@ class MessageBox extends React.Component {
         if (!this.myScroll) {
             this.canMove = canMove;
             this.myScroll = new IScroll('.messagesBox', {
-                mouseWheel: true
-                , scrollbars: true
-                , interactiveScrollbars: true
-                , startY: -this.canMove
+                startY: -this.canMove
                 , resizeScrollbars: true
             });
         } else {
@@ -118,10 +80,10 @@ class MessageBox extends React.Component {
     }
 
     render() {
-        let me=this;
+        let me = this;
         console.log(this.props.messages);
-        let messages=[];
-        for(let key in this.props.messages){
+        let messages = [];
+        for (let key in this.props.messages) {
             messages.push(this.props.messages[key])
         }
         messages.sort(function (a, b) {

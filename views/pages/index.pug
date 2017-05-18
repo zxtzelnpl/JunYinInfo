@@ -11,7 +11,7 @@ html
         script.
             (function () {
                 var deviceWidth = document.documentElement.clientWidth < 640 ? document.documentElement.clientWidth : 640;
-                document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';//750的设计稿
+                document.documentElement.style.fontSize = deviceWidth / 6.4 + 'px';//750的设计稿
             })();
     body
         if(belongId)
@@ -72,6 +72,6 @@ html
             INITIAL_STATE_MES_ORIGN.forEach(function(message){
                 INITIAL_STATE_MES.set(message);
             });
-        div(id="app")
+        div(id="app" class="container")
         script(src="/socket.io/socket.io.js")
         script(src="/js/index.js")
