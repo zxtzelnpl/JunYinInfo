@@ -5,6 +5,7 @@ const User = require('../app/controllers/user');
 const Message = require('../app/controllers/message');
 const Admin = require('../app/controllers/admin');
 const Visit = require('../app/controllers/visit');
+const Excel = require('../app/controllers/excel');
 const Way1 = require('../app/controllers/way1');
 const Way2 = require('../app/controllers/way2');
 
@@ -19,6 +20,7 @@ module.exports = function (app, io) {
 
     /*自动回复*/
     app.get('/autoplay',Visit.autoReplay);
+    app.get('/excel/:way', Excel.excel);
 
     /*Way1*/
     app.get('/way/way1', Way1.index);

@@ -12,14 +12,16 @@ block content
             .form-group
                 label.col-sm-2.col-sm-offset-3.control-label 开始时间：
                 .col-sm-4
-                    input.form-control(name="search[timeStart]" type="date")
+                    input.form-control(id="timeStart" name="search[timeStart]" type="date")
             .form-group
                 label.col-sm-2.col-sm-offset-3.control-label 结束时间：
                 .col-sm-4
-                    input.form-control(name="search[timeEnd]" type="date")
+                    input.form-control(id="timeEnd" name="search[timeEnd]" type="date")
             .form-group
                 div.col-sm-offset-5.col-sm-2
                     button.btn.btn-primary(type="submit") 查询
+    .row
+        a#excel.btn.btn-warning(href="/excel/"+way) 下载EXCEL
     .row
         table.table.table-hover.table-bordered
             thead
