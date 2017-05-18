@@ -1,7 +1,7 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message.js');
 const pageSize = 20;
-const optFind={'level':1000};
+const optFind={'level':{$gt:999}};
 
 exports.userList = function (req, res) {
     let pageNum = req.params.page;
@@ -53,65 +53,6 @@ exports.userUpdate = function (req, res) {
                 user: user
             });
         });
-};
-
-exports.userSearch = function (req, res) {
-    RoomModel
-        .find({})
-        .select('name title')
-        .exec(function (err, rooms) {
-            if (err) {
-                console.log(err)
-            }
-            res.render('userSearch', {
-                    title: '用户查询',
-                    rooms: rooms
-                }
-            );
-        });
-};
-
-exports.userQuery = function (req, res) {
-    let search = {};
-    let _search = req.body.search;
-    let totalPageNum;
-    let pageNum = req.params.page;
-    console.log(_search);
-    for (let key in _search) {
-        if (_search[key] !== '') {
-            if (key === 'online') {
-                if (_search[key] === 'true') {
-                    search[key] = true
-                } else {
-                    search[key] = false
-                }
-            } else if (key === 'name' || key === 'nickName') {
-                search[key] = new RegExp(_search[key], 'gi')
-            } else {
-                search[key] = _search[key]
-            }
-        }
-    }
-    console.log(search);
-
-    UserModel.count(search, function (err, count) {
-        totalPageNum = Math.ceil(count / pageSize);
-        UserModel.find(search)
-            .skip((pageNum - 1) * pageSize)
-            .limit(pageSize)
-            .populate('room', 'title')
-            .exec(function (err, users) {
-                if (err) {
-                    console.log(err);
-                }
-                res.render('userQuery', {
-                    title: '管理用户列表-查询结果'
-                    , users: users
-                    , search: _search
-                    , pageCount: totalPageNum
-                });
-            });
-    });
 };
 
 exports.signUp = function (req, res) {
@@ -229,4 +170,64 @@ exports.signOut = function (req, res) {
     return res.json({
         state: 'success'
     })
+};
+
+
+exports.userSearch = function (req, res) {
+    RoomModel
+        .find({})
+        .select('name title')
+        .exec(function (err, rooms) {
+            if (err) {
+                console.log(err)
+            }
+            res.render('userSearch', {
+                    title: '用户查询',
+                    rooms: rooms
+                }
+            );
+        });
+};
+
+exports.userQuery = function (req, res) {
+    let search = {};
+    let _search = req.body.search;
+    let totalPageNum;
+    let pageNum = req.params.page;
+    console.log(_search);
+    for (let key in _search) {
+        if (_search[key] !== '') {
+            if (key === 'online') {
+                if (_search[key] === 'true') {
+                    search[key] = true
+                } else {
+                    search[key] = false
+                }
+            } else if (key === 'name' || key === 'nickName') {
+                search[key] = new RegExp(_search[key], 'gi')
+            } else {
+                search[key] = _search[key]
+            }
+        }
+    }
+    console.log(search);
+
+    UserModel.count(search, function (err, count) {
+        totalPageNum = Math.ceil(count / pageSize);
+        UserModel.find(search)
+            .skip((pageNum - 1) * pageSize)
+            .limit(pageSize)
+            .populate('room', 'title')
+            .exec(function (err, users) {
+                if (err) {
+                    console.log(err);
+                }
+                res.render('userQuery', {
+                    title: '管理用户列表-查询结果'
+                    , users: users
+                    , search: _search
+                    , pageCount: totalPageNum
+                });
+            });
+    });
 };

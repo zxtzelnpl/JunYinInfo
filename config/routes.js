@@ -15,7 +15,7 @@ module.exports = function (app, io) {
         next();
     });
 
-    /*Index*/
+    /*Way1*/
     app.get('/', Index.index);
     app.get('/way1/chat/:id',Way1.chat);
     app.post('/way1/leaveMes', Way1.leaveMes);
@@ -44,14 +44,14 @@ module.exports = function (app, io) {
     app.get('/admin/usersignup', Admin.adminRequired, User.userSignUp);
     app.get('/admin/userdetail/:id', Admin.adminRequired, User.userDetail);
     app.get('/admin/userupdate/:id', Admin.adminRequired, User.userUpdate);
-    app.get('/admin/usersearch', Admin.adminRequired, User.userSearch);
-    app.post('/admin/userquery/:page', Admin.adminRequired, User.userQuery);
     app.post('/admin/user/signup', Admin.adminRequired, User.signUp);
     app.post('/admin/user/update', Admin.adminRequired, User.update);
     app.delete('/admin/user/delete', Admin.adminRequired, User.delete);
     app.get('/admin/user/forbidden', Admin.adminRequired, User.forbidden);
 
-    /*Admin-Message*/
+    /*Lost*/
+    app.get('/admin/usersearch', Admin.adminRequired, User.userSearch);
+    app.post('/admin/userquery/:page', Admin.adminRequired, User.userQuery);
     app.get('/admin/messagelist/:page', Admin.adminRequired, Message.messageList);
     app.get('/admin/messagesearch', Admin.adminRequired,Message.messageSearch);
     app.post('/admin/messagequery/:page', Admin.adminRequired, Message.query);
