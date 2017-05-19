@@ -37,7 +37,6 @@ const render = () => {
         html = (
             <div className="wrap">
                 <LeaveMessage />
-                <Chat />
                 <AutoReplay />
             </div>
         )

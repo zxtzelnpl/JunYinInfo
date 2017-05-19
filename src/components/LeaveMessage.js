@@ -21,7 +21,8 @@ class LeaveMessage extends React.Component{
             data:me.state,
             success:(data)=>{
                 if (data.state === 'success') {
-                    console.log('success')
+                    console.log('success');
+                    window.location.reload();
                 }else{
                     console.log('获取数据失败，请稍后再试')
                 }
@@ -39,7 +40,8 @@ class LeaveMessage extends React.Component{
             data:{},
             success:(data)=>{
                 if (data.state === 'success') {
-                    console.log('success')
+                    console.log('success');
+                    window.location.reload();
                 }else{
                     console.log('获取数据失败，请稍后再试')
                 }
