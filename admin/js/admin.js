@@ -14,7 +14,7 @@ $('#submit').click(function(e){
         }
         ,success:function(data){
             console.log(data);
-            location.reload();
+            location.href='/admin/login';
         }
         ,error:function(data){
             console.log(data)
