@@ -1,4 +1,5 @@
 const fs=require('fs');
+const path = require('path');
 
 /**定义常量**/
 const port = process.env.PORT || 3000;
@@ -9,7 +10,6 @@ const dbUrl = 'mongodb://localhost/info';
 const secret='info';
 
 /**引如外部**/
-const path = require('path');
 const mongoose = require('mongoose');
 const express = require('express');
 const cookieParser = require('cookie-parser');
