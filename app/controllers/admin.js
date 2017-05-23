@@ -1,5 +1,7 @@
 exports.login = function (req, res) {
-    res.render('login', {});
+    res.render('login', {
+        title:'登录界面'
+    });
 };
 
 exports.adminRequired=function(req,res,next){

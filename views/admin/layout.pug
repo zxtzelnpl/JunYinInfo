@@ -4,19 +4,24 @@ html
         meta(charset="utf-8")
         title #{title}
         link(rel="stylesheet",href="/admin/css/bootstrap.min.css")
+        link(rel="stylesheet",href="/css/admin/everyone.css")
         block css
     body
         .container
+            .page-header.text-center
+                h2
+                    | 君银证券
+                    small #{title}
             .row
                 .col-sm-2
                     if user&&parseInt(user.level)>=1000
                         .row
                             .col-sm-12
-                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-user.label.label-default#userName #{user.name}
-                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-signal.label.label-default#userLevel #{user.level}
-                                p.col-sm-12.col-xs-2.col-xs-1.glyphicon.glyphicon-flag.label.label-default#userBelong #{user.belong}
-                                a#signOut.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-danger.btn-sm 登出
-                        .row
+                                ul.list-group
+                                    li.list-group-item.text-center.glyphicon.glyphicon-user#userName #{user.name}
+                                    li.list-group-item.text-center.glyphicon.glyphicon-signal#userLevel #{user.level}
+                                    li.list-group-item.text-center.glyphicon.glyphicon-flag#userBelong #{user.way}
+                                    li.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-danger.btn-sm#signOut 登出
                             .col-sm-12
                                 ul.nav.nav-pills.nav-stacked.text-center
                                     li(role="presentation").dropdown
@@ -31,11 +36,11 @@ html
                                             | 聊天管理
                                             span.caret
                                         ul#messagelist.collapse
-                                            if(user.level=='10000')
+                                            if(user.level == '10000')
                                                 li: a(role="button" href="/admin/leavemes/1") 留言列表
-                                            if(user.level=='10000'||user.way=='way1')
+                                            if(user.level == '10000' || user.way == 'way1')
                                                 li: a(role="button" href="/way1/leavemes/1") way1留言列表
-                                            if(user.level=='10000'||user.way=='way2')
+                                            if(user.level == '10000' || user.way == 'way2')
                                                 li: a(role="button" href="/way2/leavemes/1") way2留言列表
                 .col-sm-10
                     block content

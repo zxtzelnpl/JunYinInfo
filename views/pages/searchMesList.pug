@@ -4,24 +4,26 @@ block css
 
 block content
     .row
-        div 点击次数 #{clickCount}
-        div 留言人数 #{listCount}
-        div 对话人数 #{chatCount}
-    .row
-        form.form-horizontal(method="POST" action="/"+way+"/leavemes/1" target="_self" id="form")
-            .form-group
-                label.col-sm-2.col-sm-offset-3.control-label 开始时间：
-                .col-sm-4
+        .col-sm-5
+            div.btn-group(role="group")
+                button.btn.btn-default
+                    | 点击次数：
+                    span.badge #{clickCount}
+                button.btn.btn-default
+                    | 留言人数：
+                    span.badge #{listCount}
+                button.btn.btn-default
+                    | 对话人数：
+                    span.badge #{chatCount}
+        .col-sm-7
+            form.form-inline(method="POST" action="/"+way+"/leavemes/1" target="_self" id="form")
+                .form-group
+                    label 开始：
                     input.form-control(id="timeStart" name="search[timeStart]" type="date" value=timeStart)
-            .form-group
-                label.col-sm-2.col-sm-offset-3.control-label 结束时间：
-                .col-sm-4
+                .form-group
+                    label 结束：
                     input.form-control(id="timeEnd" name="search[timeEnd]" type="date" value=timeEnd)
-            .form-group
-                div.col-sm-offset-5.col-sm-2
-                    button.btn.btn-primary(type="submit") 查询
-    .row
-        a#excel.btn.btn-warning(href="/excel/"+way) 下载EXCEL
+                button.btn.btn-primary(type="submit") 查询
     .row
         table.table.table-hover.table-bordered
             thead
@@ -50,7 +52,7 @@ block content
                             else
                                 td: a.btn.btn-danger.btn-sm.finish(data-id=item._id) 点击完成
     .row
-        div
+        .col-sm-8
             ul#page.pagination
                 - var n=1
                 while n <= totalPageNum
@@ -58,7 +60,8 @@ block content
                         li: a(class="active" data-page=n src="javascript:void(0)")=n++
                     else
                         li: a(data-page=n src="javascript:void(0)")=n++
-
+        .col-sm-3.text-right
+            a#excel.btn.btn-warning(href="/excel/" + way) 下载EXCEL
 
 block js
     script(src="/admin/js/leaveMesList.js")
