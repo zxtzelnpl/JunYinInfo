@@ -4,7 +4,6 @@ const ClickCountModel = require('../models/clickCount');
 const way = 'way2';
 const pageSize = 15;
 
-
 exports.index = function (req, res) {
     let userId = req.session.user ? req.session.user._id : undefined;
     if (!userId) {
