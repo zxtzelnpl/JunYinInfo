@@ -30,7 +30,6 @@ const render = () => {
         html = (
             <div>
                 <Chat />
-                <AutoReplay />
             </div>
         )
     } else {

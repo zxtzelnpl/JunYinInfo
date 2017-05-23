@@ -10,7 +10,7 @@ exports.index = function (req, res) {
         res.render('index', {
             title: '咨询页面',
             messages: '',
-            way:way
+            way: way
         });
         return;
     }
@@ -37,7 +37,7 @@ exports.index = function (req, res) {
         let clickCount = new ClickCountModel({name: way});
         clickCount.save(function (err, clickCount) {
             if (err) {
-                console.log(err)
+                reject(err)
             }
             resolve(clickCount)
         })
@@ -48,7 +48,7 @@ exports.index = function (req, res) {
             res.render('index', {
                 title: '咨询页面',
                 messages: results[0],
-                way:way
+                way: way
             });
         })
         .catch(function (err) {

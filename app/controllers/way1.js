@@ -37,7 +37,7 @@ exports.index = function (req, res) {
         let clickCount = new ClickCountModel({name: way});
         clickCount.save(function (err, clickCount) {
             if (err) {
-                console.log(err)
+                reject(err)
             }
             resolve(clickCount)
         })
