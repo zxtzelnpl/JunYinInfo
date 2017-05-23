@@ -2,7 +2,7 @@ const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
 const ClickCountModel = require('../models/clickCount');
 const way = 'admin';
-const pageSize = 20;
+const pageSize = 15;
 
 exports.userList = function (req, res) {
     let pageNum = req.params.pageNum;

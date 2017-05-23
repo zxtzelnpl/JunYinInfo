@@ -2,7 +2,7 @@ const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
 const ClickCountModel = require('../models/clickCount');
 const way = 'way1';
-const pageSize = 20;
+const pageSize = 15;
 
 exports.index = function (req, res) {
     let userId = req.session.user ? req.session.user._id : undefined;

@@ -1,5 +1,5 @@
-exports.admin = function (req, res) {
-    res.render('admin', {});
+exports.login = function (req, res) {
+    res.render('login', {});
 };
 
 exports.adminRequired=function(req,res,next){
