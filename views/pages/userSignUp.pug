@@ -41,7 +41,12 @@ block content
             div.form-group
                 label.col-sm-2.col-sm-offset-3.control-label(for="signUpLevel") 渠道：
                 div.col-sm-4
-                    input.form-control(id="signUpWay" name="user[way]" type="text"  )
+                    mixin option(value,title)
+                        option(value=value)=title
+                    select.form-control(id="signUpWay" name="user[way]")
+                        option(value='')='请选择'
+                        each val in ways
+                            +option(val._id,val.name)
             div.form-group
                 div.col-sm-offset-5.col-sm-2.text-center
                     input.btn.btn-success(id="submit" type="submit" value="提交")

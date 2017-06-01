@@ -1,5 +1,6 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message.js');
+const WayModel=require('../models/way.js');
 const pageSize = 20;
 const optFind={'level':{$gt:999}};
 
@@ -11,7 +12,7 @@ exports.userList = function (req, res) {
         UserModel.find(optFind)
             .skip((pageNum - 1) * pageSize)
             .limit(pageSize)
-            .populate('room', 'title')
+            .populate('way','name')
             .exec(function (err, users) {
                 if (err) {
                     console.log(err);
@@ -26,14 +27,30 @@ exports.userList = function (req, res) {
 };
 
 exports.userSignUp = function (req, res) {
-    res.render('userSignUp', {
-        title: '用户注册'
+    let waysPromise=new Promise(function(resolve,reject){
+        WayModel
+            .find({})
+            .exec(function(err,ways){
+                if(err){reject(err)}
+                resolve(ways);
+            })
     });
+
+    waysPromise.then(function(ways  ){
+        res.render('userSignUp', {
+            title: '用户注册',
+            ways
+        });
+    });
+
+
 };
 
 exports.userDetail = function (req, res) {
     let _id = req.params.id;
-    UserModel.findOne({_id: _id})
+    UserModel
+        .findOne({_id: _id})
+        .populate('way','name')
         .exec(function (err, user) {
             if(err){console.log(err)}
             if(user){
@@ -52,16 +69,37 @@ exports.userDetail = function (req, res) {
 
 exports.userUpdate = function (req, res) {
     let _id = req.params.id;
-    UserModel
-        .findOne({_id: _id})
-        .populate('room', 'title')
-        .exec(function (err, user) {
-            if(err){console.log(err)}
+    let waysPromise=new Promise(function(resolve,reject){
+        WayModel
+            .find({})
+            .exec(function(err,ways){
+                if(err){reject(err)}
+                resolve(ways);
+            })
+    });
+    let userPromise=new Promise(function(resolve,reject){
+        UserModel
+            .findOne({_id: _id})
+            .exec(function (err, user){
+                if(err){reject(err)}
+                resolve(user)
+            })
+    });
+
+    Promise
+        .all([waysPromise,userPromise])
+        .then(function([ways,user]){
+            console.log(ways);
             res.render('userUpdate', {
                 title: user.name + '信息修改',
-                user: user
+                user,
+                ways
             });
+        })
+        .catch(function(err){
+
         });
+
 };
 
 exports.signUp = function (req, res) {

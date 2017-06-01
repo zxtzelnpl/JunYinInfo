@@ -1,5 +1,7 @@
 const MessageModel = require('../models/message');
 const ClickCountModel = require('../models/clickCount');
+const UserModel = require('../models/user');
+const WayModel = require('../models/way');
 
 exports.index = function (req, res) {
     let userId = req.session.user ? req.session.user._id : undefined;
@@ -56,12 +58,27 @@ exports.index = function (req, res) {
 };
 
 exports.test = function (req, res) {
-    // RoomModel
-    //     .findOne({name: 'shanghai'})
-    //     .exec(function (err, room) {
-    //         MessageModel.update({},{room:room._id},{multi:true})
-    //             .exec(function(err,results){
-    //                 console.log(results);
-    //             })
-    //     })
+    let id=req.query.id;
+    if(id==1){
+        WayModel
+            .findOne({name: '渠道1'})
+            .exec(function (err, way) {
+                console.log(way);
+                UserModel.update({},{way:way._id},{multi:true})
+                    .exec(function(err,results){
+                        console.log(results);
+                    })
+            })
+    }
+    if(id==2){
+        WayModel
+            .findOne({name: '渠道2'})
+            .exec(function (err, way) {
+                console.log(way);
+                UserModel.update({},{way:way._id},{multi:true})
+                    .exec(function(err,results){
+                        console.log(results);
+                    })
+            })
+    }
 };

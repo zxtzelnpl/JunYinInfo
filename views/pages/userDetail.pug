@@ -27,7 +27,10 @@ block content
                         td #{user.level}
                     tr
                         td.text-right 渠道：
-                        td #{user.way}
+                        if(user.way&&user.way.name)
+                            td #{user.way.name}
+                        else
+                            td 无渠道
                     tr
                         td.text-right 是否被禁用：
                         td #{user.forbidden}

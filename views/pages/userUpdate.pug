@@ -25,7 +25,7 @@ block content
             div.form-group
                 label.col-sm-2.col-sm-offset-3.control-label 性别：
                 div.col-sm-4
-                    if user.sex=="male"
+                    if user.sex == "male"
                         label.radio-inline(for="signUpSexMale")
                             input(id="signUpSexMale" name="user[sex]" type="radio" value="male" checked="checked")
                             | 男
@@ -44,9 +44,17 @@ block content
                 div.col-sm-4
                     input.form-control(id="signUpLevel" name="user[level]" type="number" value=user.level)
             div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpLevel") 渠道：
+                label.col-sm-2.col-sm-offset-3.control-label(for="signWay") 渠道：
                 div.col-sm-4
-                    input.form-control(id="signUpWay" name="user[way]" type="text" value=user.way)
+                    mixin option(value)
+                        if user.way && String(user.way) == value._id
+                            option(value=value._id selected)=value.name
+                        else
+                            option(value=value._id)=value.name
+                    select.form-control(id="signWay" name="user[way]")
+                        option(value='')='请选择'
+                        each val in ways
+                            +option(val)
             div.form-group
                 div.col-sm-offset-5.col-sm-2.text-center
                     input.btn.btn-success(id="submit" type="submit" value="提交")

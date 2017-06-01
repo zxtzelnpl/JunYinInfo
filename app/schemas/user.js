@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const bcrypt = require('bcryptjs');
 const SALT_WORK_FACTOR = 10;
@@ -14,7 +15,10 @@ let UserSchema = new Schema({
     , phone: String
     , email: String
     , sex: String
-    , way:String
+    , way:{
+        type:ObjectId,
+        ref:'Way'
+    }
     , leaveMes:String
     , level: {
         type: Number
