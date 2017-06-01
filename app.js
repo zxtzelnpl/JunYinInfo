@@ -38,7 +38,7 @@ const mongoStore = connectMongo(session);
 const sessionStore = new mongoStore({
     mongooseConnection: mongoose.connection
     , collection: 'session'
-    , ttl: 365 * 24 * 60*60
+    , ttl: 14 * 24 * 60*60
 });
 const sessionMiddleware=session({
     secret: secret
@@ -46,7 +46,7 @@ const sessionMiddleware=session({
     , saveUninitialized: true
     , store: sessionStore
     , cookie:{
-        maxAge:365*24*60*60*1000
+        maxAge:14*24*60*60*1000
     }
 });
 /**3.session持久化end*/

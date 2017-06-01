@@ -1,0 +1,22 @@
+extends ../admin/layout
+
+block css
+
+block content
+    .row
+        form.form-horizontal(method="POST" action="/admin/way/update")
+            input(type="hidden" name="way[_id]" value=way._id)
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="wayName") 渠道名称：
+                div.col-sm-4
+                    input.form-control(id="wayName" name="way[name]" type="text" value=way.name)
+            div.form-group
+                label.col-sm-2.col-sm-offset-3.control-label(for="wayAutoReplay") 自动回复：
+                div.col-sm-4
+                    input.form-control(id="wayAutoReplay" name="way[autoReplay]" type="text" value=way.autoReplay)
+            div.form-group
+                div.col-sm-offset-5.col-sm-2.text-center
+                    input.btn.btn-success(id="submit" type="submit" value="提交")
+                div.col-sm-2.text-center
+                    input.btn.btn-warning(id="reset" type="reset" value="重置")
+block js

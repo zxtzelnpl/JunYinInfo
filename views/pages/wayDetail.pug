@@ -1,0 +1,22 @@
+extends ../admin/layout
+
+block css
+
+block content
+    .row
+        .col-sm-4.col-sm-offset-4
+            table.table.table-hover.table-bordered
+                tbody
+                    tr
+                        td.text-right 渠道名称：
+                        td #{way.name}
+                    tr
+                        td.text-right 渠道回复内容：
+                        td #{way.autoReplay}
+                    tr
+                        td.text-right 渠道点击次数：
+                        td #{way.clickCount}
+                    tr
+                        td.text-right 创建时间：
+                        td #{moment(way.createAt).format('MM/DD/YYYY')}
+block js

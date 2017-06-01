@@ -24,24 +24,27 @@ html
                                     li.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-danger.btn-sm#signOut 登出
                             .col-sm-12
                                 ul.nav.nav-pills.nav-stacked.text-center
-                                    li(role="presentation").dropdown
-                                        a.collapsed(data-toggle="collapse" href="#userlist" role="button" aria-haspopup="true" aria-expanded="false")
-                                            | 用户管理
-                                            span.caret
-                                        ul#userlist.collapse
-                                            li: a(role="button" href="/admin/userlist/1") 用户列表
-                                            li: a(role="button" href="/admin/usersignup") 用户注册
+                                    if(parseInt(user.level)>=10000)
+                                        li(role="presentation")
+                                            a.collapsed(data-toggle="collapse" href="#userlist" role="button" aria-haspopup="true" aria-expanded="false")
+                                                | 用户管理
+                                                span.caret
+                                            ul#userlist.collapse
+                                                li: a(role="button" href="/admin/userlist/1") 用户列表
+                                                li: a(role="button" href="/admin/usersignup") 用户注册
                                     li(role="presentation")
                                         a.collapsed(data-toggle="collapse" href="#messagelist" role="button" aria-haspopup="true" aria-expanded="false")
                                             | 聊天管理
                                             span.caret
                                         ul#messagelist.collapse
-                                            if(user.level == '10000')
-                                                li: a(role="button" href="/admin/leavemes/1") 留言列表
-                                            if(user.level == '10000' || user.way == 'way1')
-                                                li: a(role="button" href="/way1/leavemes/1") way1留言列表
-                                            if(user.level == '10000' || user.way == 'way2')
-                                                li: a(role="button" href="/way2/leavemes/1") way2留言列表
+                                            li: a(role="button" href="/admin/leavemes/1") 留言列表
+                                    li(role="presentation")
+                                        a.collapse(data-toggle="collapse" href="#waylist" role="button" aria-haspopup="true" aria-expanded="false")
+                                            | 渠道管理
+                                            span.caret
+                                        ul#waylist.collapse
+                                            li: a(role="button" href="/admin/way/waylist/1") 渠道列表
+                                            li: a(role="button" href="/admin/way/waynew") 新建渠道
                 .col-sm-10
                     block content
     script(src="/js/jquery.js")

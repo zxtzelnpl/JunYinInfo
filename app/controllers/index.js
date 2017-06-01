@@ -11,7 +11,7 @@ exports.index = function (req, res) {
         return;
     }
 
-    let promiseMessages = new Promise(function (resolve, reject) {
+    let messagesPromise = new Promise(function (resolve, reject) {
 
         let optFind = {belong: userId};
         let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
@@ -29,7 +29,7 @@ exports.index = function (req, res) {
             });
     });
 
-    let promiseClickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         let clickCount = new ClickCountModel({name: 'count'});
         clickCount.save(function (err, clickCount) {
             if (err) {
@@ -39,11 +39,11 @@ exports.index = function (req, res) {
         })
     });
 
-    Promise.all([promiseMessages, promiseClickCount])
-        .then(function (results) {
+    Promise.all([messagesPromise, clickCountPromise])
+        .then(function ([messages,clickCounts]) {
             res.render('index', {
                 title: '咨询页面',
-                messages: results[0]
+                messages: messages
             });
         })
         .catch(function (err) {

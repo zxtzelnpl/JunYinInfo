@@ -9,7 +9,7 @@ exports.userList = function (req, res) {
     let totalPageNum;
     let totalNum;
 
-    let clickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         ClickCountModel.find({}).count(function (err, count) {
             if (err) {
                 reject(err)
@@ -18,7 +18,7 @@ exports.userList = function (req, res) {
         })
     });
 
-    let listCount = new Promise(function (resolve, reject) {
+    let listCountPromise = new Promise(function (resolve, reject) {
         let optFind = {level: 0};
         UserModel.find(optFind).count(function (err, count) {
             if (err) {
@@ -28,7 +28,7 @@ exports.userList = function (req, res) {
         });
     });
 
-    let lists = listCount.then(function (count) {
+    let listsPromise = listCountPromise.then(function (count) {
         let optFind = {level: 0};
         return new Promise(function (resolve, reject) {
             totalPageNum = Math.ceil(count / pageSize);
@@ -47,7 +47,7 @@ exports.userList = function (req, res) {
         })
     });
 
-    let chatCount = new Promise(function (resolve, reject) {
+    let chatCountPromise = new Promise(function (resolve, reject) {
         let optFind = {level: 0,chat:true};
         UserModel.find(optFind).count(function (err, count) {
             if (err) {
@@ -58,18 +58,18 @@ exports.userList = function (req, res) {
     });
 
     Promise
-        .all([clickCount, listCount, lists, chatCount])
-        .then(function (results) {
+        .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
+        .then(function ([clickCount,listCount,lists,chatCount]) {
             res.render('leaveMesList', {
                 title: '留言列表',
                 way: way,
-                users: results[2],
+                users:lists,
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
-                clickCount: results[0],
-                listCount: results[1],
-                chatCount: results[3]
+                clickCount: clickCount,
+                listCount: listCount,
+                chatCount: chatCount
             })
             ;
         })
@@ -89,7 +89,7 @@ exports.userSearch = function (req, res) {
 
 
 
-    let clickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             createAt: {
                 "$gte": timeStart,
@@ -106,7 +106,7 @@ exports.userSearch = function (req, res) {
             })
     });
 
-    let listCount = new Promise(function (resolve, reject) {
+    let listCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             level: 0,
             createAt: {
@@ -122,7 +122,7 @@ exports.userSearch = function (req, res) {
         });
     });
 
-    let lists = listCount.then(function (count) {
+    let listsPromise = listCountPromise.then(function (count) {
         let optFind = {
             level: 0,
             createAt: {
@@ -144,7 +144,7 @@ exports.userSearch = function (req, res) {
         })
     });
 
-    let chatCount = new Promise(function (resolve, reject) {
+    let chatCountPromise = new Promise(function (resolve, reject) {
         UserModel.find({
             level: 0,
             chat: true,
@@ -161,20 +161,20 @@ exports.userSearch = function (req, res) {
     });
 
     Promise
-        .all([clickCount, listCount, lists, chatCount])
-        .then(function (results) {
+        .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
+        .then(function ([clickCount,listCount,lists,chatCount]) {
             res.render('searchMesList', {
                 title: '留言列表',
                 way: way,
                 timeStart: req.body.search['timeStart'],
                 timeEnd: req.body.search['timeEnd'],
-                users: results[2],
+                users: lists,
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
-                clickCount: results[0],
-                listCount: results[1],
-                chatCount: results[3]
+                clickCount: clickCount,
+                listCount: listCount,
+                chatCount: chatCount
             })
             ;
         })

@@ -1,11 +1,10 @@
-const multiparty=require('connect-multiparty');
-
 const Index = require('../app/controllers/index');
 const User = require('../app/controllers/user');
 const Message = require('../app/controllers/message');
 const Admin = require('../app/controllers/admin');
 const Visit = require('../app/controllers/visit');
 const Excel = require('../app/controllers/excel');
+const Way = require('../app/controllers/way');
 const Way1 = require('../app/controllers/way1');
 const Way2 = require('../app/controllers/way2');
 
@@ -43,6 +42,13 @@ module.exports = function (app, io) {
     app.get('/admin/leavemes/:pageNum',Admin.adminRequired,Visit.userList);//页面：留言列表
     app.post('/admin/leavemes/:pageNum',Admin.adminRequired,Visit.userSearch);//页面：留言检索
 
+    app.get('/admin/way/waylist/:page',Admin.adminRequired,Way.wayList);
+    app.get('/admin/way/waynew',Admin.adminRequired,Way.wayNew);
+    app.post('/admin/way/new',Admin.adminRequired,Way.new);
+    app.post('/admin/way/update',Admin.adminRequired,Way.update);
+    app.get('/admin/way/waydetail/:id',Admin.adminRequired,Way.wayDetail);
+    app.get('/admin/way/wayupdate/:id',Admin.adminRequired,Way.wayUpdate);
+
     /*页面：管理员登录*/
     app.get('/admin/login', Admin.login);
     /*JSON：管理员登入登出*/
@@ -64,6 +70,13 @@ module.exports = function (app, io) {
 
     /*Index Test*/
     app.get('/test', Index.test);
+
+    /*404页面*/
+    app.get('*', function(req, res){
+        res.render('information', {
+            information: 'No Found'
+        })
+    });
 
     /*socket.io*/
     io.on('connection', function (socket) {

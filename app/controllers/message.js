@@ -37,8 +37,8 @@ exports.save = function (msg, next) {
        })
     });
 
-    Promise.all([populatePromise,leaveMesPromise]).then(function(results){
-        next(results[0])
+    Promise.all([populatePromise,leaveMesPromise]).then(function([populate,leaveMes]){
+        next(populate)
     });
 
 };

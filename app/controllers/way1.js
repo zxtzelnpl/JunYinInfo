@@ -15,7 +15,7 @@ exports.index = function (req, res) {
         return;
     }
 
-    let promiseMessages = new Promise(function (resolve, reject) {
+    let messagesPromise = new Promise(function (resolve, reject) {
 
         let optFind = {belong: userId};
         let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
@@ -33,7 +33,7 @@ exports.index = function (req, res) {
             });
     });
 
-    let promiseClickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         let clickCount = new ClickCountModel({name: way});
         clickCount.save(function (err, clickCount) {
             if (err) {
@@ -43,11 +43,11 @@ exports.index = function (req, res) {
         })
     });
 
-    Promise.all([promiseMessages, promiseClickCount])
-        .then(function (results) {
+    Promise.all([messagesPromise, clickCountPromise])
+        .then(function ([messages,clickCount]) {
             res.render('index', {
                 title: '咨询页面',
-                messages: results[0],
+                messages: messages,
                 way: way
             });
         })
@@ -119,7 +119,7 @@ exports.userList = function (req, res) {
     let totalPageNum;
     let totalNum;
 
-    let clickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             name: way
         };
@@ -131,7 +131,7 @@ exports.userList = function (req, res) {
         })
     });
 
-    let listCount = new Promise(function (resolve, reject) {
+    let listCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             level: 0,
             way: way
@@ -144,7 +144,7 @@ exports.userList = function (req, res) {
         });
     });
 
-    let lists = listCount.then(function (count) {
+    let listsPromise = listCountPromise.then(function (count) {
         let optFind = {
             level: 0,
             way: way
@@ -166,7 +166,7 @@ exports.userList = function (req, res) {
         })
     });
 
-    let chatCount = new Promise(function (resolve, reject) {
+    let chatCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             level: 0,
             chat: true,
@@ -181,18 +181,18 @@ exports.userList = function (req, res) {
     });
 
     Promise
-        .all([clickCount, listCount, lists, chatCount])
-        .then(function (results) {
+        .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
+        .then(function ([clickCount, listCount, lists, chatCount]) {
             res.render('leaveMesList', {
                 title: '留言列表',
                 way: way,
-                users: results[2],
+                users: lists,
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
-                clickCount: results[0],
-                listCount: results[1],
-                chatCount: results[3]
+                clickCount: clickCount,
+                listCount: listCount,
+                chatCount: chatCount
             })
             ;
         })
@@ -210,7 +210,7 @@ exports.userSearch = function (req, res) {
     let timeStart = new Date(req.body.search['timeStart']);
     let timeEnd = new Date(req.body.search['timeEnd']);
 
-    let clickCount = new Promise(function (resolve, reject) {
+    let clickCountPromise = new Promise(function (resolve, reject) {
         ClickCountModel.find({
             name: way,
             createAt: {
@@ -225,7 +225,7 @@ exports.userSearch = function (req, res) {
         })
     });
 
-    let listCount = new Promise(function (resolve, reject) {
+    let listCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             level: 0,
             way: way,
@@ -242,7 +242,7 @@ exports.userSearch = function (req, res) {
         });
     });
 
-    let lists = listCount.then(function (count) {
+    let listsPromise = listCountPromise.then(function (count) {
         let optFind = {
             level: 0,
             way: way,
@@ -266,7 +266,7 @@ exports.userSearch = function (req, res) {
         })
     });
 
-    let chatCount = new Promise(function (resolve, reject) {
+    let chatCountPromise = new Promise(function (resolve, reject) {
         let optFind = {
             chat: true,
             level: 0,
@@ -287,20 +287,20 @@ exports.userSearch = function (req, res) {
     });
 
     Promise
-        .all([clickCount, listCount, lists, chatCount])
-        .then(function (results) {
+        .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
+        .then(function ([clickCount, listCount, lists, chatCount]) {
             res.render('searchMesList', {
                 title: '留言列表',
                 way: way,
                 timeStart: req.body.search['timeStart'],
                 timeEnd: req.body.search['timeEnd'],
-                users: results[2],
+                users: lists,
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
-                clickCount: results[0],
-                listCount: results[1],
-                chatCount: results[3]
+                clickCount: clickCount,
+                listCount: listCount,
+                chatCount: chatCount
             })
             ;
         })

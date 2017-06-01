@@ -35,10 +35,18 @@ exports.userDetail = function (req, res) {
     let _id = req.params.id;
     UserModel.findOne({_id: _id})
         .exec(function (err, user) {
-            res.render('userDetail', {
-                user: user,
-                title: user.name + '的用户信息'
-            });
+            if(err){console.log(err)}
+            if(user){
+                res.render('userDetail', {
+                    user: user,
+                    title: user.name + '的用户信息'
+                });
+            }else{
+                res.render('wrongWay',{
+                    title:'错误',
+                    err:'找不到所需要的用户'
+                })
+            }
         })
 };
 
@@ -48,6 +56,7 @@ exports.userUpdate = function (req, res) {
         .findOne({_id: _id})
         .populate('room', 'title')
         .exec(function (err, user) {
+            if(err){console.log(err)}
             res.render('userUpdate', {
                 title: user.name + '信息修改',
                 user: user
