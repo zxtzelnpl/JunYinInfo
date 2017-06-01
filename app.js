@@ -78,6 +78,7 @@ sio.use(function(socket, next) {
 routes(app, sio);
 /**7.路由文件end*/
 
+/**local变量*/
 app.locals.moment=moment;
 
 /**8.服务器端口监听start*/
