@@ -1,43 +1,55 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
-const ClickCountModel = require('../models/clickCount');
-const way = 'admin';
-const pageSize = 15;
+const WayModel = require('../models/way');
+const pageSize = 12;
 
 exports.userList = function (req, res) {
     let pageNum = req.params.pageNum;
+    let way = req.params.way;
     let totalPageNum;
     let totalNum;
+    let findOpt = {level: 0};
+    let wayOpt = {};
+    if (way !== 'all') {
+        findOpt.way = way;
+        wayOpt._id = way;
+    }
 
     let clickCountPromise = new Promise(function (resolve, reject) {
-        ClickCountModel.find({}).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        })
+        WayModel
+            .find(wayOpt)
+            .exec(function (err, ways) {
+                let clickCount = 0;
+                if (err) {
+                    reject(err)
+                }
+                ways.forEach(function (way, index) {
+                    clickCount += way.clickCount;
+                });
+                resolve(clickCount);
+            })
     });
 
     let listCountPromise = new Promise(function (resolve, reject) {
-        let optFind = {level: 0};
-        UserModel.find(optFind).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        });
+        UserModel
+            .find(findOpt)
+            .count(function (err, count) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(count);
+            });
     });
 
     let listsPromise = listCountPromise.then(function (count) {
-        let optFind = {level: 0};
         return new Promise(function (resolve, reject) {
             totalPageNum = Math.ceil(count / pageSize);
             UserModel
-                .find(optFind)
+                .find(findOpt)
                 .sort({updateAt: -1})
                 .skip((pageNum - 1) * pageSize)
                 .limit(pageSize)
-                .populate('room', 'title')
+                .populate('way', 'name')
                 .exec(function (err, users) {
                     if (err) {
                         reject(err)
@@ -48,22 +60,24 @@ exports.userList = function (req, res) {
     });
 
     let chatCountPromise = new Promise(function (resolve, reject) {
-        let optFind = {level: 0,chat:true};
-        UserModel.find(optFind).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        })
+        let _findOpt = Object.assign({chat: true}, findOpt);
+        UserModel
+            .find(_findOpt)
+            .count(function (err, count) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(count);
+            })
     });
 
     Promise
         .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
-        .then(function ([clickCount,listCount,lists,chatCount]) {
+        .then(function ([clickCount, listCount, lists, chatCount]) {
             res.render('leaveMesList', {
                 title: '留言列表',
                 way: way,
-                users:lists,
+                users: lists,
                 totalPageNum: totalPageNum,
                 pageNum: pageNum,
                 totalNum: totalNum,
@@ -81,40 +95,48 @@ exports.userList = function (req, res) {
 
 exports.userSearch = function (req, res) {
     let pageNum = req.params.pageNum;
+    let way = req.params.way;
     let totalPageNum;
     let totalNum;
-
-    let timeStart = new Date(req.body.search['timeStart']);
-    let timeEnd = new Date(req.body.search['timeEnd']);
-
-
+    let findOpt = {
+        level: 0
+    };
+    console.log("req.body.search['timeStart']");
+    console.log(req.body.search['timeStart']);
+    console.log("req.body.search['timeEnd']");
+    console.log(req.body.search['timeEnd']);
+    if(req.body.search['timeStart']||req.body.search['timeEnd']){
+        findOpt.createAt={};
+    }
+    if(req.body.search['timeStart']){
+        findOpt.createAt.$gte=new Date(req.body.search['timeStart']);
+    }
+    if(req.body.search['timeEnd']){
+        findOpt.createAt.$lt=new Date(req.body.search['timeEnd']);
+    }
+    let wayOpt = {};
+    if (way !== 'all') {
+        findOpt.way = way;
+        wayOpt._id = way;
+    }
 
     let clickCountPromise = new Promise(function (resolve, reject) {
-        let optFind = {
-            createAt: {
-                "$gte": timeStart,
-                "$lt": timeEnd
-            }
-        };
-        ClickCountModel
-            .find(optFind)
-            .count(function (err, count) {
+        WayModel
+            .find(wayOpt)
+            .exec(function (err, ways) {
+                let clickCount = 0;
                 if (err) {
                     reject(err)
                 }
-                resolve(count);
+                ways.forEach(function (way, index) {
+                    clickCount += way.clickCount;
+                });
+                resolve(clickCount);
             })
     });
 
     let listCountPromise = new Promise(function (resolve, reject) {
-        let optFind = {
-            level: 0,
-            createAt: {
-                "$gte": timeStart,
-                "$lt": timeEnd
-            }
-        };
-        UserModel.find(optFind).count(function (err, count) {
+        UserModel.find(findOpt).count(function (err, count) {
             if (err) {
                 reject(err)
             }
@@ -123,18 +145,12 @@ exports.userSearch = function (req, res) {
     });
 
     let listsPromise = listCountPromise.then(function (count) {
-        let optFind = {
-            level: 0,
-            createAt: {
-                "$gte": timeStart,
-                "$lt": timeEnd
-            }
-        };
         return new Promise(function (resolve, reject) {
             totalPageNum = Math.ceil(count / pageSize);
-            UserModel.find(optFind)
+            UserModel.find(findOpt)
                 .skip((pageNum - 1) * pageSize)
                 .limit(pageSize)
+                .populate('way', 'name')
                 .exec(function (err, users) {
                     if (err) {
                         reject(err)
@@ -145,24 +161,20 @@ exports.userSearch = function (req, res) {
     });
 
     let chatCountPromise = new Promise(function (resolve, reject) {
-        UserModel.find({
-            level: 0,
-            chat: true,
-            createAt: {
-                "$gte": timeStart,
-                "$lt": timeEnd
-            }
-        }).count(function (err, count) {
-            if (err) {
-                reject(err)
-            }
-            resolve(count);
-        })
+        let _findOpt = Object.assign({chat: true}, findOpt);
+        UserModel
+            .find(_findOpt)
+            .count(function (err, count) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(count);
+            })
     });
 
     Promise
         .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
-        .then(function ([clickCount,listCount,lists,chatCount]) {
+        .then(function ([clickCount, listCount, lists, chatCount]) {
             res.render('searchMesList', {
                 title: '留言列表',
                 way: way,
@@ -226,7 +238,6 @@ exports.finish = function (req, res) {
     UserModel
         .findOne({_id: _id})
         .exec(function (err, user) {
-            console.log(user);
             user.finish = true;
             user.save(function () {
                 res.json({
@@ -236,10 +247,10 @@ exports.finish = function (req, res) {
         })
 };
 
-exports.autoReplay=function(req,res){
-    let way=req.query.way;
+exports.autoReplay = function (req, res) {
+    let way = req.query.way;
     res.json({
-        state:'success',
-        content:'这个是一个自动回复'+way
+        state: 'success',
+        content: '这个是一个自动回复' + way
     })
 };

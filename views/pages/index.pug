@@ -28,7 +28,8 @@ html
                 var belongId = "";
         if(way)
             script.
-                var way="#{way}";
+                var way="#{way._id}";
+                var autoReplay="#{way.autoReplay}"
         else
             script.
                 var way="";

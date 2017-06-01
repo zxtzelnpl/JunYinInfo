@@ -20,10 +20,13 @@ html
                                 ul.list-group
                                     li.list-group-item.text-center.glyphicon.glyphicon-user#userName #{user.name}
                                     li.list-group-item.text-center.glyphicon.glyphicon-signal#userLevel #{user.level}
+                                    if(parseInt(user.level)==1000)
+                                        li.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-success.btn-sm
+                                            a(role="button" href="/admin/way/waylist/1") 渠道列表
                                     li.col-xs-2.col-xs-offset-4.col-sm-12.col-sm-offset-0.btn.btn-danger.btn-sm#signOut 登出
                             .col-sm-12
-                                ul.nav.nav-pills.nav-stacked.text-center
-                                    if(parseInt(user.level)>=10000)
+                                if(parseInt(user.level)>=10000)
+                                    ul.nav.nav-pills.nav-stacked.text-center
                                         li(role="presentation")
                                             a.collapsed(data-toggle="collapse" href="#userlist" role="button" aria-haspopup="true" aria-expanded="false")
                                                 | 用户管理
@@ -31,19 +34,19 @@ html
                                             ul#userlist.collapse
                                                 li: a(role="button" href="/admin/userlist/1") 用户列表
                                                 li: a(role="button" href="/admin/usersignup") 用户注册
-                                    li(role="presentation")
-                                        a.collapsed(data-toggle="collapse" href="#messagelist" role="button" aria-haspopup="true" aria-expanded="false")
-                                            | 聊天管理
-                                            span.caret
-                                        ul#messagelist.collapse
-                                            li: a(role="button" href="/admin/leavemes/1") 留言列表
-                                    li(role="presentation")
-                                        a.collapse(data-toggle="collapse" href="#waylist" role="button" aria-haspopup="true" aria-expanded="false")
-                                            | 渠道管理
-                                            span.caret
-                                        ul#waylist.collapse
-                                            li: a(role="button" href="/admin/way/waylist/1") 渠道列表
-                                            li: a(role="button" href="/admin/way/waynew") 新建渠道
+                                        li(role="presentation")
+                                            a.collapsed(data-toggle="collapse" href="#messagelist" role="button" aria-haspopup="true" aria-expanded="false")
+                                                | 聊天管理
+                                                span.caret
+                                            ul#messagelist.collapse
+                                                li: a(role="button" href="/admin/leavemes/all/1") 留言列表
+                                        li(role="presentation")
+                                            a.collapse(data-toggle="collapse" href="#waylist" role="button" aria-haspopup="true" aria-expanded="false")
+                                                | 渠道管理
+                                                span.caret
+                                            ul#waylist.collapse
+                                                li: a(role="button" href="/admin/way/waylist/1") 渠道列表
+                                                li: a(role="button" href="/admin/way/waynew") 新建渠道
                 .col-sm-10
                     block content
     script(src="/js/jquery.js")

@@ -17,8 +17,13 @@ class LeaveMessage extends React.Component{
         console.log(me.state);
         $.ajax({
             type:'POST',
-            url:'/way/leaveMes/'+way,
-            data:me.state,
+            url:'/way/leaveMes/',
+            data:{
+                nickName:this.state.nickName,
+                phone:this.state.phone,
+                leaveMes:this.state.leaveMes,
+                way:way
+            },
             success:(data)=>{
                 if (data.state === 'success') {
                     console.log('success');
@@ -36,8 +41,10 @@ class LeaveMessage extends React.Component{
     handleClose(){
         $.ajax({
             type:'POST',
-            url:'/way/direct/'+way,
-            data:{},
+            url:'/way/direct/',
+            data:{
+                way:way
+            },
             success:(data)=>{
                 if (data.state === 'success') {
                     console.log('success');

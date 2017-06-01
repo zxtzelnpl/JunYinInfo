@@ -64,7 +64,12 @@ exports.wayDetail = function (req, res) {
 
 exports.wayList = function (req, res) {
     let page = req.params.page;
+    let user=req.session.user;
     let findOpt = {};
+    if(parseInt(user.level)<10000){
+        findOpt._id=user.way;
+    }
+    let url = req.protocol + '://' + req.get('host') + '/way/';
     let countPromise = new Promise(function (resolve, reject) {
         WayModel
             .find(findOpt)
@@ -97,7 +102,8 @@ exports.wayList = function (req, res) {
             res.render('wayList',{
                 title:'渠道列表',
                 pageNum,
-                ways
+                ways,
+                url
             })
         })
 };

@@ -16,7 +16,7 @@ block content
                     | 对话人数：
                     span.badge #{chatCount}
         .col-sm-7
-            form.form-inline(method="POST" action="/"+way+"/leavemes/1" target="_self" id="form")
+            form.form-inline(method="POST" action="/admin/leavemes/"+way+"/1" target="_self" id="form")
                 .form-group
                     label 开始：
                     input.form-control(id="timeStart" name="search[timeStart]" type="date" value=timeStart)
@@ -40,7 +40,10 @@ block content
                 if users&&users.length>0
                     each item in users
                         tr(class="item-id-"+item._id)
-                            td #{item.way}
+                            if(item.way && item.way.name)
+                                td #{item.way.name}
+                            else
+                                td 无渠道
                             td #{item.nickName}
                             td #{item.phone}
                             td #{item.leaveMes}

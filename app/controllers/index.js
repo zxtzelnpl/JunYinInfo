@@ -4,25 +4,19 @@ const UserModel = require('../models/user');
 const WayModel = require('../models/way');
 
 exports.index = function (req, res) {
+    let _id = req.params.id;
     let userId = req.session.user ? req.session.user._id : undefined;
-    if (!userId) {
-        res.render('index', {
-            title: '咨询页面',
-            messages: ''
-        });
-        return;
-    }
 
     let messagesPromise = new Promise(function (resolve, reject) {
 
-        let optFind = {belong: userId};
-        let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
-        let optPopulate = {path: 'from', select: 'nickName -_id'};
+        let findOpt = {belong: userId};
+        let fieldOpt = ['_id', 'from', 'belong', 'content', 'createAt'];
+        let populationOpt = {path: 'from', select: 'nickName -_id'};
 
         MessageModel
-            .find(optFind, optField)
+            .find(findOpt, fieldOpt)
             .sort({_id: -1})
-            .populate(optPopulate)
+            .populate(populationOpt)
             .exec(function (err, messages) {
                 if (err) {
                     reject(err)
@@ -31,22 +25,44 @@ exports.index = function (req, res) {
             });
     });
 
-    let clickCountPromise = new Promise(function (resolve, reject) {
-        let clickCount = new ClickCountModel({name: 'count'});
-        clickCount.save(function (err, clickCount) {
-            if (err) {
-                console.log(err)
-            }
-            resolve(clickCount)
+    let wayPromise = new Promise(function (resolve, reject) {
+        WayModel
+            .findOne({_id: _id})
+            .exec(function (err, way) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(way);
+            })
+    });
+    let clickCountPromise = wayPromise.then(function (way) {
+        return new Promise(function (resolve, reject) {
+            way.clickCount++;
+            way.save(function (err, way) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(way)
+            })
         })
     });
 
-    Promise.all([messagesPromise, clickCountPromise])
-        .then(function ([messages,clickCounts]) {
-            res.render('index', {
-                title: '咨询页面',
-                messages: messages
-            });
+    Promise.all([messagesPromise, wayPromise, clickCountPromise])
+        .then(function ([messages, way]) {
+            if (!userId) {
+                res.render('index', {
+                    title: '咨询页面',
+                    messages: '',
+                    way
+                });
+            } else {
+                res.render('index', {
+                    title: '咨询页面',
+                    messages,
+                    way
+                });
+            }
+
         })
         .catch(function (err) {
             res.render('wrongWay', {
@@ -57,26 +73,75 @@ exports.index = function (req, res) {
 
 };
 
+exports.leaveMes = function (req, res) {
+    let _user = req.body;
+    let user = new UserModel(_user);
+
+    user.save(function (err, user) {
+        if (err) {
+            console.log(err)
+        }
+        req.session.user = user;
+        res.json({
+            state: 'success',
+            user: user
+        })
+    })
+};
+
+exports.direct = function (req, res) {
+    let _user = req.body;
+
+    let numPromise = new Promise(function (resolve, reject) {
+        UserModel.find({phone: {$exists: false}}).count(function (err, count) {
+            if (err) {
+                reject(err)
+            }
+            resolve(count);
+        })
+    });
+
+    numPromise
+        .then(function (count) {
+            _user.nickName = '匿名' + count;
+            user = new UserModel(_user);
+            user.save(function (err, user) {
+                if (err) {
+                    console.log(err)
+                }
+                req.session.user = user;
+                res.json({
+                    state: 'success',
+                    user: user
+                })
+            })
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+};
+
+
 exports.test = function (req, res) {
-    let id=req.query.id;
-    if(id==1){
+    let id = req.query.id;
+    if (id == 1) {
         WayModel
             .findOne({name: '渠道1'})
             .exec(function (err, way) {
                 console.log(way);
-                UserModel.update({},{way:way._id},{multi:true})
-                    .exec(function(err,results){
+                UserModel.update({}, {way: way._id}, {multi: true})
+                    .exec(function (err, results) {
                         console.log(results);
                     })
             })
     }
-    if(id==2){
+    if (id == 2) {
         WayModel
             .findOne({name: '渠道2'})
             .exec(function (err, way) {
                 console.log(way);
-                UserModel.update({},{way:way._id},{multi:true})
-                    .exec(function(err,results){
+                UserModel.update({}, {way: way._id}, {multi: true})
+                    .exec(function (err, results) {
                         console.log(results);
                     })
             })

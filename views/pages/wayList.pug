@@ -8,7 +8,7 @@ block content
             thead
                 tr
                     th 名称
-                    th 自动回复
+                    th 连接地址
                     th 点击次数
                     th 查看
                     th 修改
@@ -17,9 +17,9 @@ block content
                     each item in ways
                         tr(class="item-id-"+item._id)
                             td #{item.name}
-                            td #{item.autoReplay}
+                            td #{url+item._id}
                             td #{item.clickCount}
-                            td: a(target="_blank", href= "/admin/way/waydetail/"+item._id) 查看
+                            td: a(target="_blank", href= "/admin/leavemes/"+item._id+"/1") 查看
                             td: a(target="_blank", href= "/admin/way/wayupdate/"+item._id) 修改
     .row
         div
