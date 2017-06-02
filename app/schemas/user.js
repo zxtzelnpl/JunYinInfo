@@ -14,19 +14,20 @@ let UserSchema = new Schema({
     , password: String
     , phone: String
     , email: String
+    , wx: String
     , sex: String
-    , way:{
-        type:ObjectId,
-        ref:'Way'
+    , way: {
+        type: ObjectId,
+        ref: 'Way'
     }
-    , leaveMes:String
+    , leaveMes: String
     , level: {
         type: Number
         , default: 0
     }
-    ,online:{
-        type:Boolean
-        ,default:false
+    , online: {
+        type: Boolean
+        , default: false
     }
     , createAt: {
         type: Date
@@ -57,7 +58,7 @@ UserSchema.pre('save', function (next) {
     } else {
         user.updateAt = Date.now();
     }
-    if(user.password){
+    if (user.password) {
         bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
             if (err) {
                 return next(err)
@@ -70,7 +71,7 @@ UserSchema.pre('save', function (next) {
                 next()
             })
         })
-    }else{
+    } else {
         next();
     }
 });

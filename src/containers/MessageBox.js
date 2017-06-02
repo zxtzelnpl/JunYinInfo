@@ -2,17 +2,17 @@ import {connect} from 'react-redux';
 import {messages} from '../actions'
 import MessageBox from '../components/MessageBox';
 
-const mapStateToProps = (state, ownProps) => ({
+var mapStateToProps = (state, ownProps) => ({
   messages: state.messages
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+var mapDispatchToProps = (dispatch, ownProps) => ({
   getAll: (datas) => {
     dispatch(messages(datas,'ADD'))
   }
 });
 
-const _MessageBox = connect(
+var _MessageBox = connect(
   mapStateToProps
   , mapDispatchToProps
 )(MessageBox);

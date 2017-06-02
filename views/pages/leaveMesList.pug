@@ -31,6 +31,7 @@ block content
                     th 渠道
                     th 名称
                     th 手机
+                    th 微信
                     th 留言内容
                     th 创建时间
                     th 最近聊天时间
@@ -46,9 +47,10 @@ block content
                                 td 无渠道
                             td #{item.nickName}
                             td #{item.phone}
+                            td #{item.wx}
                             td #{item.leaveMes}
-                            td #{moment(item.createAt).format('YYYY-MM-DD--HH:mm:ss')}
-                            td #{moment(item.updateAt).format('YYYY-MM-DD--HH:mm:ss')}
+                            td #{moment(item.createAt).format('MM-DD--HH:mm')}
+                            td #{moment(item.updateAt).format('MM-DD--HH:mm')}
                             td: a.btn.btn-success.btn-sm(target="_blank", href= "/chat/"+item._id) 聊天
                             if(item.finish)
                                 td: a 已经完成

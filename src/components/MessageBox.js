@@ -1,5 +1,4 @@
 import React from 'react';
-import $ from 'jquery';
 import IScroll from 'iscroll';
 import socket from '../socket/socket';
 
@@ -32,11 +31,11 @@ class MessageBox extends React.Component {
 
     componentDidMount() {
         console.log('componentDidMount');
-        let me = this;
-        let innerH = me.messages.scrollHeight;
-        let outerH = me.messagesBox.clientHeight;
+        var me = this;
+        var innerH = me.messages.scrollHeight;
+        var outerH = me.messagesBox.clientHeight;
         console.log(innerH, outerH);
-        let canMove = innerH - outerH;
+        var canMove = innerH - outerH;
         console.log(canMove);
         if (canMove < 0) {
             return;
@@ -51,10 +50,10 @@ class MessageBox extends React.Component {
     componentDidUpdate() {
         console.log('componentDidUpdate');
 
-        let innerH = this.messages.scrollHeight;
-        let outerH = this.messagesBox.clientHeight;
+        var innerH = this.messages.scrollHeight;
+        var outerH = this.messagesBox.clientHeight;
         console.log(innerH, outerH);
-        let canMove = innerH - outerH;
+        var canMove = innerH - outerH;
         console.log(canMove);
         if (canMove < 0) {
             return;
@@ -80,9 +79,9 @@ class MessageBox extends React.Component {
     }
 
     render() {
-        let me = this;
+        var me = this;
         console.log(this.props.messages);
-        let messages = [];
+        var messages = [];
         for (let key in this.props.messages) {
             messages.push(this.props.messages[key])
         }
@@ -90,7 +89,7 @@ class MessageBox extends React.Component {
             return new Date(a.createAt).getTime() - new Date(b.createAt).getTime()
         });
 
-        let messagesBox = messages.map((message, index) => (
+        var messagesBox = messages.map((message, index) => (
             <Message key={index} message={message} check={me.check} del={me.del}/>
         ));
 

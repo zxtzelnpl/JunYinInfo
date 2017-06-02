@@ -72,8 +72,24 @@ exports.index = function (req, res) {
 
 exports.leaveMes = function (req, res) {
     let _user = req.body;
-    let user = new UserModel(_user);
 
+    const wxReg=/^[a-zA-Z\d_]{5,20}$/;
+    const phoneReg=/^1[3|4|5|7|8][0-9]\d{8}$/;
+    const illegalReg=/[&></]+/g;
+    if(_user.phone!==''&&!phoneReg.test(_user.phone)){
+        return Report.errJSON(res,'手机号码有误')
+    }
+    if(_user.wx!==''&&!wxReg.test(_user.wx)){
+        return Report.errJSON(res,'微信有误')
+    }
+    if(_user.leaveMes!==''&&illegalReg.test(_user.leaveMes)){
+        return Report.errJSON(res,'留言内容不能含有&></等字符。')
+    }
+    if(_user.nickName!==''&&illegalReg.test(_user.nickName)){
+        return Report.errJSON(res,'姓名中不能含有&></等字符。')
+    }
+
+    let user = new UserModel(_user);
     user.save(function (err, user) {
         if (err) {
             return Report.errPage(res, err)
