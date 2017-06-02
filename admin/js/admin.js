@@ -1,38 +1,41 @@
 import $ from 'jquery';
 
-$('#submit').click(function(e){
+$('#submit').click(function (e) {
     e.preventDefault();
-    let name=$('#signInName').val();
-    let password=$('#signInPassword').val();
-    console.log(name,password);
+    let name = $('#signInName').val();
+    let password = $('#signInPassword').val();
     $.ajax({
-        url:'/user/signin'
-        ,method:'POST'
-        ,data:{
+        url: '/user/signin'
+        , method: 'POST'
+        , data: {
             name
-            ,password
+            , password
         }
-        ,success:function(data){
-            console.log(data);
-            location.href='/admin/login';
+        , success: function (data) {
+            if (data.state == 'success') {
+                location.href = '/admin/login';
+            }
+            else {
+                alert(data.err)
+            }
         }
-        ,error:function(data){
-            console.log(data)
+        , error: function (err) {
+            alert(err)
         }
     })
 });
 
-$('#signOut_ls_999').click(function(e){
+$('#signOut_ls_999').click(function (e) {
     e.preventDefault();
     $.ajax({
-        url:'/user/signout'
-        ,method:'GET'
-        ,success:function(data){
+        url: '/user/signout'
+        , method: 'GET'
+        , success: function (data) {
             console.log(data);
-            location.href='/admin/login';
+            location.href = '/admin/login';
         }
-        ,error:function(data){
-            console.log(data)
+        , error: function (err) {
+            alert(err)
         }
     })
 });

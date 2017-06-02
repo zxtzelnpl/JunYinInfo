@@ -4,3 +4,10 @@ exports.errPage=function(res,err){
         err: err
     })
 };
+
+exports.errJSON=function(res,err){
+    res.json({
+        state: 'fail',
+        err: err
+    })
+};

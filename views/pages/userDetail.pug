@@ -9,39 +9,39 @@ block content
                 tbody
                     tr
                         td.text-right 用户名：
-                        td #{user.name}
+                        td #{user0.name}
                     tr
                         td.text-right 昵称：
-                        td #{user.nickName}
+                        td #{user0.nickName}
                     tr
                         td.text-right 手机：
-                        td #{user.phone}
+                        td #{user0.phone}
                     tr
                         td.text-right 邮箱：
-                        td #{user.email}
+                        td #{user0.email}
                     tr
                         td.text-right 性别：
-                        td #{user.sex}
+                        td #{user0.sex}
                     tr
                         td.text-right 等级：
-                        td #{user.level}
+                        td #{user0.level}
                     tr
                         td.text-right 渠道：
-                        if(user.way&&user.way.name)
+                        if(user0.way&&user0.way.name)
                             td #{user.way.name}
                         else
                             td 无渠道
                     tr
                         td.text-right 是否被禁用：
-                        td #{user.forbidden}
+                        td #{user0.forbidden}
 
                     tr
                         td.text-right 创建时间：
-                        td #{moment(user.createAt).format('MM/DD/YYYY')}
+                        td #{moment(user0.createAt).format('MM/DD/YYYY')}
                     tr
                         td.text-right 修改时间：
-                        td #{moment(user.updateAt).format('MM/DD/YYYY')}
+                        td #{moment(user0.updateAt).format('MM/DD/YYYY')}
                     tr
                         td.text-right 是否在线：
-                        td #{user.online}
+                        td #{user0.online}
 block js

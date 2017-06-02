@@ -104,9 +104,7 @@ exports.direct = function (req, res) {
                 _user.nickName = '匿名' + count;
                 user = new UserModel(_user);
                 user.save(function (err, user) {
-                    if (err) {
-                        reject(err)
-                    }
+                    if (err) {reject(err)}
                     resolve(user)
                 })
             });
