@@ -1,6 +1,7 @@
 const UserModel = require('../models/user.js');
 const MessageModel = require('../models/message');
 const WayModel = require('../models/way');
+const Report = require('../../report/report');
 const pageSize = 12;
 
 exports.userList = function (req, res) {
@@ -23,7 +24,7 @@ exports.userList = function (req, res) {
                 if (err) {
                     reject(err)
                 }
-                ways.forEach(function (way, index) {
+                ways.forEach(function (way) {
                     clickCount += way.clickCount;
                 });
                 resolve(clickCount);
@@ -88,7 +89,7 @@ exports.userList = function (req, res) {
             ;
         })
         .catch(function (err) {
-            console.log(err);
+            Report.errPage(res, err);
         })
     ;
 };
@@ -105,14 +106,14 @@ exports.userSearch = function (req, res) {
     console.log(req.body.search['timeStart']);
     console.log("req.body.search['timeEnd']");
     console.log(req.body.search['timeEnd']);
-    if(req.body.search['timeStart']||req.body.search['timeEnd']){
-        findOpt.createAt={};
+    if (req.body.search['timeStart'] || req.body.search['timeEnd']) {
+        findOpt.createAt = {};
     }
-    if(req.body.search['timeStart']){
-        findOpt.createAt.$gte=new Date(req.body.search['timeStart']);
+    if (req.body.search['timeStart']) {
+        findOpt.createAt.$gte = new Date(req.body.search['timeStart']);
     }
-    if(req.body.search['timeEnd']){
-        findOpt.createAt.$lt=new Date(req.body.search['timeEnd']);
+    if (req.body.search['timeEnd']) {
+        findOpt.createAt.$lt = new Date(req.body.search['timeEnd']);
     }
     let wayOpt = {};
     if (way !== 'all') {
@@ -128,7 +129,7 @@ exports.userSearch = function (req, res) {
                 if (err) {
                     reject(err)
                 }
-                ways.forEach(function (way, index) {
+                ways.forEach(function (way) {
                     clickCount += way.clickCount;
                 });
                 resolve(clickCount);
@@ -191,7 +192,7 @@ exports.userSearch = function (req, res) {
             ;
         })
         .catch(function (err) {
-            console.log(err);
+            Report.errPage(res, err);
         })
     ;
 };
@@ -226,31 +227,42 @@ exports.chat = function (req, res) {
             });
         })
         .catch(function (err) {
-            res.render('wrongWay', {
-                title: '发生错误',
-                err: err
-            })
+            Report.errPage(res, err);
         });
 };
 
 exports.finish = function (req, res) {
-    let _id = req.query.id;
-    UserModel
-        .findOne({_id: _id})
-        .exec(function (err, user) {
+    let userPromise = new Promise(function (resolve, reject) {
+        let _id = req.query.id;
+        UserModel
+            .findOne({_id: _id})
+            .exec(function (err, user) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(user)
+            })
+    });
+    let savePromise = userPromise.then(function (user) {
+        return new Promise(function (resolve, reject) {
             user.finish = true;
-            user.save(function () {
+            user.save(function (err) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(true)
+            })
+        })
+    });
+    savePromise
+        .then(function (flag) {
+            if (flag) {
                 res.json({
                     state: 'success'
                 })
-            })
+            }
         })
-};
-
-exports.autoReplay = function (req, res) {
-    let way = req.query.way;
-    res.json({
-        state: 'success',
-        content: '这个是一个自动回复' + way
-    })
+        .catch(function (err) {
+            Report.errJSON(res, err)
+        });
 };
