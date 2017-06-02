@@ -1,7 +1,7 @@
 const MessageModel = require('../models/message');
-const ClickCountModel = require('../models/clickCount');
 const UserModel = require('../models/user');
 const WayModel = require('../models/way');
+const Report = require('../../report/report');
 
 exports.index = function (req, res) {
     let _id = req.params.id;
@@ -65,10 +65,7 @@ exports.index = function (req, res) {
 
         })
         .catch(function (err) {
-            res.render('wrongWay', {
-                title: '发生错误',
-                err: err
-            })
+            Report.errPage(res, err);
         });
 
 };
@@ -79,7 +76,7 @@ exports.leaveMes = function (req, res) {
 
     user.save(function (err, user) {
         if (err) {
-            console.log(err)
+            Report.errPage(res, err)
         }
         req.session.user = user;
         res.json({
@@ -101,23 +98,30 @@ exports.direct = function (req, res) {
         })
     });
 
-    numPromise
+    let savePromise = numPromise
         .then(function (count) {
-            _user.nickName = '匿名' + count;
-            user = new UserModel(_user);
-            user.save(function (err, user) {
-                if (err) {
-                    console.log(err)
-                }
-                req.session.user = user;
-                res.json({
-                    state: 'success',
-                    user: user
+            return new Promise(function (resolve, reject) {
+                _user.nickName = '匿名' + count;
+                user = new UserModel(_user);
+                user.save(function (err, user) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(user)
                 })
+            });
+        });
+
+    savePromise
+        .then(function (user) {
+            req.session.user = user;
+            res.json({
+                state: 'success',
+                user: user
             })
         })
         .catch(function (err) {
-            console.log(err);
+            Report.errPage(res, err);
         })
 };
 
