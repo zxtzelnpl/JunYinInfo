@@ -22,15 +22,16 @@ exports.userList = function (req, res) {
             .exec(function (err, ways) {
                 let clickCount = 0;
                 if (err) {
-                    return reject(err)
+                    reject(err)
                 }
                 if(!ways||ways.length===0){
-                    return reject('找不到管理员所负责的渠道')
+                    reject('找不到管理员所负责的渠道')
+                }else{
+                    ways.forEach(function (way) {
+                        clickCount += way.clickCount;
+                    });
+                    resolve(clickCount);
                 }
-                ways.forEach(function (way) {
-                    clickCount += way.clickCount;
-                });
-                resolve(clickCount);
             })
     });
 
@@ -126,15 +127,17 @@ exports.userSearch = function (req, res) {
             .exec(function (err, ways) {
                 let clickCount = 0;
                 if (err) {
-                    return reject(err)
+                    reject(err)
                 }
                 if(!ways||ways.length===0){
-                    return reject('找不到管理员所负责的渠道')
+                    reject('找不到管理员所负责的渠道')
+                }else{
+                    ways.forEach(function (way) {
+                        clickCount += way.clickCount;
+                    });
+                    resolve(clickCount);
                 }
-                ways.forEach(function (way) {
-                    clickCount += way.clickCount;
-                });
-                resolve(clickCount);
+
             })
     });
 
