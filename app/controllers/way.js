@@ -80,6 +80,9 @@ exports.wayList = function (req, res) {
                     reject(err)
                 }else{
                     pageNum=Math.ceil(count/pageSize);
+                    if(page>pageNum){
+                        reject('页数不正确')
+                    }
                     resolve(pageNum)
                 }
             })

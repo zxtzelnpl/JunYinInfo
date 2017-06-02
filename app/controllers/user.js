@@ -8,6 +8,7 @@ const optFind = {'level': {$gt: 999}};
 exports.userList = function (req, res) {
     let countPromise = new Promise(function (resolve, reject) {
         let totalPageNum;
+        let pageNum = req.params.page;
         UserModel
             .find(optFind)
             .count(function (err, count) {
@@ -15,6 +16,9 @@ exports.userList = function (req, res) {
                     reject(err)
                 }else{
                     totalPageNum = Math.ceil(count / pageSize);
+                    if(pageNum>totalPageNum){
+                        reject('页数错误');
+                    }
                     resolve(totalPageNum);
                 }
             })

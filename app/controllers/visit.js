@@ -24,9 +24,9 @@ exports.userList = function (req, res) {
                 if (err) {
                     reject(err)
                 }
-                if(!ways||ways.length===0){
+                if (!ways || ways.length === 0) {
                     reject('找不到管理员所负责的渠道')
-                }else{
+                } else {
                     ways.forEach(function (way) {
                         clickCount += way.clickCount;
                     });
@@ -42,13 +42,16 @@ exports.userList = function (req, res) {
                 if (err) {
                     reject(err)
                 }
+                totalPageNum = Math.ceil(count / pageSize);
+                if (pageNum > totalPageNum) {
+                    reject('请选择正确的页数')
+                }
                 resolve(count);
             });
     });
 
     let listsPromise = listCountPromise.then(function (count) {
         return new Promise(function (resolve, reject) {
-            totalPageNum = Math.ceil(count / pageSize);
             UserModel
                 .find(findOpt)
                 .sort({updateAt: -1})
@@ -129,9 +132,9 @@ exports.userSearch = function (req, res) {
                 if (err) {
                     reject(err)
                 }
-                if(!ways||ways.length===0){
+                if (!ways || ways.length === 0) {
                     reject('找不到管理员所负责的渠道')
-                }else{
+                } else {
                     ways.forEach(function (way) {
                         clickCount += way.clickCount;
                     });
@@ -144,7 +147,11 @@ exports.userSearch = function (req, res) {
     let listCountPromise = new Promise(function (resolve, reject) {
         UserModel.find(findOpt).count(function (err, count) {
             if (err) {
-               reject(err)
+                reject(err)
+            }
+            totalPageNum = Math.ceil(count / pageSize);
+            if (pageNum > totalPageNum) {
+                reject('请选择正确的页数')
             }
             resolve(count);
         });
@@ -152,7 +159,6 @@ exports.userSearch = function (req, res) {
 
     let listsPromise = listCountPromise.then(function (count) {
         return new Promise(function (resolve, reject) {
-            totalPageNum = Math.ceil(count / pageSize);
             UserModel.find(findOpt)
                 .skip((pageNum - 1) * pageSize)
                 .limit(pageSize)
