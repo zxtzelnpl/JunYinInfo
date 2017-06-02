@@ -22,7 +22,10 @@ exports.userList = function (req, res) {
             .exec(function (err, ways) {
                 let clickCount = 0;
                 if (err) {
-                    reject(err)
+                    return reject(err)
+                }
+                if(!ways||ways.length===0){
+                    return reject('找不到管理员所负责的渠道')
                 }
                 ways.forEach(function (way) {
                     clickCount += way.clickCount;
@@ -102,10 +105,6 @@ exports.userSearch = function (req, res) {
     let findOpt = {
         level: 0
     };
-    console.log("req.body.search['timeStart']");
-    console.log(req.body.search['timeStart']);
-    console.log("req.body.search['timeEnd']");
-    console.log(req.body.search['timeEnd']);
     if (req.body.search['timeStart'] || req.body.search['timeEnd']) {
         findOpt.createAt = {};
     }
@@ -127,7 +126,10 @@ exports.userSearch = function (req, res) {
             .exec(function (err, ways) {
                 let clickCount = 0;
                 if (err) {
-                    reject(err)
+                    return reject(err)
+                }
+                if(!ways||ways.length===0){
+                    return reject('找不到管理员所负责的渠道')
                 }
                 ways.forEach(function (way) {
                     clickCount += way.clickCount;
@@ -139,7 +141,7 @@ exports.userSearch = function (req, res) {
     let listCountPromise = new Promise(function (resolve, reject) {
         UserModel.find(findOpt).count(function (err, count) {
             if (err) {
-                reject(err)
+               reject(err)
             }
             resolve(count);
         });
