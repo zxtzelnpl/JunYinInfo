@@ -76,7 +76,7 @@ exports.leaveMes = function (req, res) {
 
     user.save(function (err, user) {
         if (err) {
-            Report.errPage(res, err)
+            return Report.errPage(res, err)
         }
         req.session.user = user;
         res.json({

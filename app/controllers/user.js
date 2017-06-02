@@ -13,9 +13,10 @@ exports.userList = function (req, res) {
             .count(function (err, count) {
                 if (err) {
                     reject(err)
+                }else{
+                    totalPageNum = Math.ceil(count / pageSize);
+                    resolve(totalPageNum);
                 }
-                totalPageNum = Math.ceil(count / pageSize);
-                resolve(totalPageNum);
             })
     });
     let usersPromise = new Promise(function (resolve, reject) {
