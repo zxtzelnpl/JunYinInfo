@@ -1,5 +1,6 @@
 const WayModel = require('../models/way');
 const pageSize = 20;
+const Report = require('../../report/report');
 
 exports.wayNew = function (req, res) {
     res.render('wayNew', {
@@ -12,7 +13,7 @@ exports.new = function (req, res) {
     let way = new WayModel(_way);
     way.save(function (err, way) {
         if (err) {
-            console.log(err)
+            return Report.errPage(res,err)
         }
         res.redirect('/admin/way/waydetail/' + way._id)
     })
@@ -24,7 +25,7 @@ exports.wayUpdate = function (req, res) {
         .findOne({_id: _id})
         .exec(function (err, way) {
             if (err) {
-                console.log(err)
+                return Report.errPage(res,err)
             }
             res.render('wayUpdate', {
                 title: '修改' + way.name + '的信息',
@@ -39,7 +40,7 @@ exports.update = function (req, res) {
     delete _way._id;
     WayModel.findByIdAndUpdate(_id, {$set: _way}, function (err) {
         if (err) {
-            console.log(err)
+            return Report.errPage(res,err)
         }
         res.redirect('/admin/way/waydetail/' + _id)
     })
@@ -53,7 +54,7 @@ exports.wayDetail = function (req, res) {
         .findOne({_id: _id})
         .exec(function (err, way) {
             if (err) {
-                console.log(err)
+                return Report.errPage(res,err)
             }
             res.render('wayDetail', {
                 title: way.name,
@@ -106,13 +107,16 @@ exports.wayList = function (req, res) {
                 url
             })
         })
+        .catch(function(err){
+            Report.errPage(res,err)
+        })
 };
 
 exports.delete = function(req,res){
     let _id = req.query.id;
     WayModel.findByIdAndRemove(_id, function (err) {
         if (err) {
-            console.log(err)
+            return Report.errPage(res,err)
         }
         res.json({
             state: 'success'
