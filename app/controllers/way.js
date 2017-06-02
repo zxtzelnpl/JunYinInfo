@@ -78,9 +78,10 @@ exports.wayList = function (req, res) {
                 let pageNum;
                 if (err) {
                     reject(err)
+                }else{
+                    pageNum=Math.ceil(count/pageSize);
+                    resolve(pageNum)
                 }
-                pageNum=Math.ceil(count/pageSize);
-                resolve(pageNum)
             })
     });
 
