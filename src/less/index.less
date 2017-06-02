@@ -124,38 +124,36 @@ a {
 
 .chat{
     position:absolute;
-    //display:flex;
-    //flex-direction: column ;
-    top:.7rem;
+    display:flex;
+    flex-direction: column ;
+    top:.65rem;
     bottom:0;
     width:6.4rem;
     overflow: hidden;
     .messagesBox{
-        position: absolute;
-        top:0;
-        bottom:80px;
         width:6.4rem;
-        //flex-grow: 1;
+        flex-grow: 1;
         overflow: hidden;
         -webkit-transform:translate3d(0,0,0);
     }
     .chatInputBox{
+        @heightO:50px;
+        @heightI:40px;
         display:flex;
-        position: absolute;
-        bottom:0;
         width:6.4rem;
         justify-content:space-around;
         align-items:center;
-        height:80px;
+        height:@heightO;
+        min-height:@heightO;
         border-top:1px solid #e8e8e8;
         background:#fff;
         input{
             display:block;
             outline: none;
             width:5rem;
-            height:30px;
+            height:@heightI;
             font-size: 15px;
-            line-height:30px;
+            line-height:@heightI;
             border:1px solid #e0e0e0;
             border-radius:5px;
             background:#ececec;
@@ -163,9 +161,9 @@ a {
         .btn{
             display:block;
             width:1rem;
-            height:30px;
+            height:@heightI;
             font-size: 15px;
-            line-height:30px;
+            line-height:@heightI;
             font-weight:bold;
             text-align:center;
         }
