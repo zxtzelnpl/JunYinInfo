@@ -7,13 +7,13 @@ block content
         .col-sm-5
             div.btn-group(role="group")
                 button.btn.btn-default
-                 | 点击次数：
+                 | 点击：
                  span.badge #{clickCount}
                 button.btn.btn-default
-                 | 留言人数：
+                 | 留言：
                  span.badge #{listCount}
                 button.btn.btn-default
-                 | 对话人数：
+                 | 对话：
                  span.badge #{chatCount}
         .col-sm-7
             form.form-inline(method="POST" action="/admin/leavemes/"+way+"/1" target="_self")

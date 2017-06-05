@@ -18,11 +18,11 @@ class LeaveMessage extends React.Component{
     }
 
     handleClick(){
-        var me=this;
-        var nameReg=/^[\u4E00-\u9FA5a-zA-Z]+$/;
-        var wxReg=/^[a-zA-Z\d_]{5,20}$/;
-        var phoneReg=/^1[3|4|5|7|8][0-9]\d{8}$/;
-        var illegalReg=/[&></]+/g;
+        let me=this;
+        const nameReg=/^[\u4E00-\u9FA5a-zA-Z]+$/;
+        const wxReg=/^[a-zA-Z\d_]{5,20}$/;
+        const phoneReg=/^1[3|4|5|7|8][0-9]\d{8}$/;
+        const illegalReg=/[&></]+/g;
         if(this.state.nickName===''){
             this.setState({
                 warning:{
