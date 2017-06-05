@@ -215,7 +215,7 @@ exports.chat = function (req, res) {
 
         let optFind = {belong: userId};
         let optField = ['_id', 'from', 'belong', 'content', 'createAt'];
-        let optPopulate = {path: 'from', select: 'nickName -_id'};
+        let optPopulate = {path: 'from', select: 'nickName'};
 
         MessageModel
             .find(optFind, optField)
@@ -229,12 +229,38 @@ exports.chat = function (req, res) {
             });
     });
 
-    promiseMessages
-        .then(function (messagesStr) {
+    let userPromise=new Promise(function(resolve,reject){
+        UserModel
+            .findOne({_id:userId})
+            .exec(function(err,user){
+                if(err){reject(err)}
+                resolve(user)
+            })
+    });
+
+    let wayPromise=userPromise.then(function(user){
+        return new Promise(function(resolve,reject){
+            let _id=user.way;
+            console.log(_id);
+            WayModel
+                .findOne({_id:_id})
+                .exec(function(err,way){
+                    if(err){reject(err)}
+                    console.log(way);
+                    resolve(way);
+                })
+        });
+    });
+
+    Promise
+        .all([promiseMessages,wayPromise])
+        .then(function ([messagesStr,way]) {
+            console.log(way);
             res.render('index', {
-                title: '咨询页面',
+                title: '咨询页面-管理',
                 messages: messagesStr,
-                belongId: userId
+                belongId: userId,
+                way:way
             });
         })
         .catch(function (err) {

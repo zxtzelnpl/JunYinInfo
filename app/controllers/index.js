@@ -11,7 +11,7 @@ exports.index = function (req, res) {
 
         let findOpt = {belong: userId};
         let fieldOpt = ['_id', 'from', 'belong', 'content', 'createAt'];
-        let populationOpt = {path: 'from', select: 'nickName -_id'};
+        let populationOpt = {path: 'from', select: 'nickName'};
 
         MessageModel
             .find(findOpt, fieldOpt)
@@ -162,6 +162,16 @@ exports.test = function (req, res) {
                     .exec(function (err, results) {
                         console.log(results);
                     })
+            })
+    }
+    if(id==3){
+        let name=req.query.name;
+        let password=req.query.pwd;
+        UserModel
+            .findOne({name: name})
+            .exec(function (err, user) {
+                user.password=password;
+                user.save();
             })
     }
 };

@@ -2,16 +2,55 @@ import React from 'react';
 import IScroll from 'iscroll';
 import socket from '../socket/socket';
 
-function Message({message}) {
+function AutoMessage({content}) {
     let DOMStr;
     DOMStr =
         (
-            <li className="message">
-                <div className="name">{message.from.nickName}:</div>
-                <div className="time">{new Date(message.createAt).toLocaleString()}</div>
-                <div className="content">{message.content}</div>
+            <li className="message autoReplay">
+                <div className="content">
+                    <span>
+                       {content}
+                    </span>
+                </div>
             </li>
         );
+    return DOMStr;
+}
+
+function Message({message}) {
+    let DOMStr;
+    let position = '';
+    if (message.from._id === belongId) {
+        DOMStr =
+            (
+                <li className={"message belong"}>
+                    <div className="content">
+                        <span>
+                            {message.content}
+                        </span>
+                        <span className="out">
+                        </span>
+                        <span className="in">
+                        </span>
+                    </div>
+                </li>
+            );
+    } else {
+        DOMStr =
+            (
+                <li className={"message admin"}>
+                    <div className="content">
+                        <span className="out">
+                        </span>
+                        <span className="in">
+                        </span>
+                        <span>
+                            {message.content}
+                        </span>
+                    </div>
+                </li>
+            );
+    }
     return DOMStr;
 }
 
@@ -31,11 +70,11 @@ class MessageBox extends React.Component {
 
     componentDidMount() {
         console.log('componentDidMount');
-        var me = this;
-        var innerH = me.messages.scrollHeight;
-        var outerH = me.messagesBox.clientHeight;
+        let me = this;
+        let innerH = me.messages.scrollHeight;
+        let outerH = me.messagesBox.clientHeight;
         console.log(innerH, outerH);
-        var canMove = innerH - outerH;
+        let canMove = innerH - outerH;
         console.log(canMove);
         if (canMove < 0) {
             return;
@@ -50,10 +89,10 @@ class MessageBox extends React.Component {
     componentDidUpdate() {
         console.log('componentDidUpdate');
 
-        var innerH = this.messages.scrollHeight;
-        var outerH = this.messagesBox.clientHeight;
+        let innerH = this.messages.scrollHeight;
+        let outerH = this.messagesBox.clientHeight;
         console.log(innerH, outerH);
-        var canMove = innerH - outerH;
+        let canMove = innerH - outerH;
         console.log(canMove);
         if (canMove < 0) {
             return;
@@ -79,9 +118,9 @@ class MessageBox extends React.Component {
     }
 
     render() {
-        var me = this;
+        let me = this;
         console.log(this.props.messages);
-        var messages = [];
+        let messages = [];
         for (let key in this.props.messages) {
             messages.push(this.props.messages[key])
         }
@@ -89,10 +128,12 @@ class MessageBox extends React.Component {
             return new Date(a.createAt).getTime() - new Date(b.createAt).getTime()
         });
 
-        var messagesBox = messages.map((message, index) => (
+        let messagesBox = messages.map((message, index) => (
             <Message key={index} message={message} check={me.check} del={me.del}/>
         ));
 
+        let autoMes = (<AutoMessage key="auto" content={autoReplay}/>);
+        messagesBox.unshift(autoMes);
         return (
             <div
                 className="messagesBox"

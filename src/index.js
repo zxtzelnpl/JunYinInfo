@@ -13,7 +13,7 @@ import {messages} from './actions';
 
 import socket from './socket/socket';
 
-var store = createStore(reducer);
+const store = createStore(reducer);
 
 if (belongId) {
     socket.on(belongId, function (message) {
@@ -25,7 +25,7 @@ if (belongId) {
 const render = () => {
     console.log(store.getState());
 
-    var html;
+    let html;
     if (fromId && belongId) {
         html = (
             <div>
@@ -45,7 +45,6 @@ const render = () => {
     ReactDOM.render(
         <Provider store={store}>
             <div>
-
                 {html}
             </div>
         </Provider>, document.getElementById('app')
