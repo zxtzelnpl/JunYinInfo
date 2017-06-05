@@ -1,34 +1,85 @@
-extends ../admin/layout
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
 
-block css
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/signin.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
 
-block content
-    if(user)
-        div.row
-            .col-sm-6.col-sm-offset-2
-                .panel.panel-default.text-center
-                    .panel-heading
-                        h3.panel-title #{user.name},欢迎
-                    .panel-body
-                        a.btn.btn-danger.btn-lg(id="signOut_ls_999") 登出
-    else
-        div.row
-            div.col-sm-6.col-sm-offset-2
-                .panel.panel-default.text-center
-                    .panel-heading
-                        h3.panel-title 请登录
-                    .panel-body
-                        .form-horizontal
-                            div.form-group
-                                label.contorl-label.col-sm-4(for="signInPassword") 登录名：
-                                .col-sm-8
-                                    input.form-control(id="signInName" type="text")
-                            div.form-group
-                                label.contorl-label.col-sm-4(for="signInPassword") 密码：
-                                .col-sm-8
-                                    input.form-control(id="signInPassword" type="password")
-                            div.form-group.text-center
-                                a.btn.btn-success(id="submit") 提交
 
-block js
-    script(src="/admin/js/admin.js")
+    body
+        .bg-switch.visible-desktop
+            .bgs
+                a.bg.active(href="#" data-img="landscape.jpg")
+                    img(src="/vendor/img/bgs/landscape.jpg")
+                a.bg(href="#" data-img="blueish.jpg")
+                    img(src="/vendor/img/bgs/blueish.jpg")
+                a.bg(href="#" data-img="7.jpg")
+                    img(src="/vendor/img/bgs/7.jpg")
+                a.bg(href="#" data-img="8.jpg")
+                    img(src="/vendor/img/bgs/8.jpg")
+                a.bg(href="#" data-img="9.jpg")
+                    img(src="/vendor/img/bgs/9.jpg")
+                a.bg(href="#" data-img="10.jpg")
+                    img(src="/vendor/img/bgs/10.jpg")
+                a.bg(href="#" data-img="11.jpg")
+                    img(src="/vendor/img/bgs/11.jpg")
+
+        .row-fluid.login-wrapper
+            a(href="#")
+                img.logo(src="/vendor/img/logo-white.png")
+            .span4.box
+                .content-wrap
+                    h6 Log in
+                    input.span12#name(type="text" placeholder="Your Account")
+                    input.span12#password(type="password" placeholder="Your password")
+                    a.btn-glow.primary.login#login Log in
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")
+    script.
+        $(function () {
+            // bg switcher
+            var $btns = $(".bg-switch .bg");
+            $btns.click(function (e) {
+                e.preventDefault();
+                $btns.removeClass("active");
+                $(this).addClass("active");
+                var bg = $(this).data("img");
+
+                $("html").css("background-image", "url('/vendor/img/bgs/" + bg + "')");
+            });
+
+            $('#login').click(function (e) {
+                e.preventDefault();
+                    var name = $('#name').val();
+                    var password = $('#password').val();
+                $.ajax({
+                    url: '/user/signin'
+                    , method: 'POST'
+                    , data: {
+                        name:name,
+                        password:password
+                    }
+                    , success: function (data) {
+                        if (data.state == 'success') {
+                             location.href = '/admin/way/waylist/1';
+                        }
+                        else {
+                            console.log(data.err)
+                        }
+                    }
+                    , error: function (err) {
+                        console.log(err)
+                    }
+                })
+            });
+
+        });

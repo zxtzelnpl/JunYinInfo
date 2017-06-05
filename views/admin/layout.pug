@@ -17,7 +17,7 @@ html
                     if user&&parseInt(user.level)>=1000
                         .row
                             .col-sm-12
-                                ul.list-group
+                                ul.list-group.zxtListOne
                                     li.list-group-item.text-center.glyphicon.glyphicon-user#userName #{user.name}
                                     li.list-group-item.text-center.glyphicon.glyphicon-signal#userLevel #{user.level}
                                     if(parseInt(user.level)==1000)
