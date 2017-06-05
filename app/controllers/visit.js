@@ -253,11 +253,11 @@ exports.chat = function (req, res) {
     });
 
     Promise
-        .all([promiseMessages,wayPromise])
-        .then(function ([messagesStr,way]) {
+        .all([promiseMessages,userPromise,wayPromise])
+        .then(function ([messagesStr,user,way]) {
             console.log(way);
             res.render('index', {
-                title: '咨询页面-管理',
+                title: '咨询-'+user.nickName,
                 messages: messagesStr,
                 belongId: userId,
                 way:way
