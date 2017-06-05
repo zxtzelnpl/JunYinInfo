@@ -19,7 +19,6 @@ function AutoMessage({content}) {
 
 function Message({message}) {
     let DOMStr;
-    let position = '';
     if (message.from._id === belongId) {
         DOMStr =
             (
@@ -59,19 +58,12 @@ class MessageBox extends React.Component {
         super(props);
         this.canMove = 0;
         this.page = 1;
-        this.pageLoad = false;
-        this.check = function (id) {
-            socket.emit('checkMessage', id)
-        };
-        this.del = function (id) {
-            socket.emit('delMessage', id)
-        };
     }
 
     componentDidMount() {
         console.log('componentDidMount');
         let me = this;
-        let innerH = me.messages.scrollHeight;
+        let innerH = me.ul.scrollHeight;
         let outerH = me.messagesBox.clientHeight;
         console.log(innerH, outerH);
         let canMove = innerH - outerH;
@@ -82,14 +74,13 @@ class MessageBox extends React.Component {
         this.canMove = canMove;
         this.myScroll = new IScroll('.messagesBox', {
             startY: -me.canMove
-            , resizeScrollbars: true
         });
     }
 
     componentDidUpdate() {
         console.log('componentDidUpdate');
 
-        let innerH = this.messages.scrollHeight;
+        let innerH = this.ul.scrollHeight;
         let outerH = this.messagesBox.clientHeight;
         console.log(innerH, outerH);
         let canMove = innerH - outerH;
@@ -101,25 +92,17 @@ class MessageBox extends React.Component {
             this.canMove = canMove;
             this.myScroll = new IScroll('.messagesBox', {
                 startY: -this.canMove
-                , resizeScrollbars: true
             });
         } else {
             if (canMove !== this.canMove) {
                 this.canMove = canMove;
                 this.myScroll.refresh();
-                if (this.pageLoad) {
-                    this.pageLoad = false;
-                    this.myScroll.scrollTo(0, 0, 500, IScroll.utils.ease.ease);
-                } else {
-                    this.myScroll.scrollTo(0, -this.canMove, 500, IScroll.utils.ease.ease);
-                }
+                this.myScroll.scrollTo(0, -this.canMove, 500, IScroll.utils.ease.ease);
             }
         }
     }
 
     render() {
-        let me = this;
-        console.log(this.props.messages);
         let messages = [];
         for (let key in this.props.messages) {
             messages.push(this.props.messages[key])
@@ -129,7 +112,7 @@ class MessageBox extends React.Component {
         });
 
         let messagesBox = messages.map((message, index) => (
-            <Message key={index} message={message} check={me.check} del={me.del}/>
+            <Message key={index} message={message}/>
         ));
 
         let autoMes = (<AutoMessage key="auto" content={autoReplay}/>);
@@ -144,7 +127,7 @@ class MessageBox extends React.Component {
                 <ul
                     style={this.state}
                     ref={(ul) => {
-                        this.messages = ul
+                        this.ul = ul
                     }}
                 >
                     {messagesBox}

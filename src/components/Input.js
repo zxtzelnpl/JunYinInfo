@@ -20,6 +20,7 @@ class Input extends React.Component {
         let content = this.state.value.replace(/\s/g, "");
         if (content === '') {
             alert('输入内容不能为空');
+            return;
         }
         socket.emit('message', {
             content: content,
