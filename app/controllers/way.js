@@ -104,7 +104,7 @@ exports.wayList = function (req, res) {
     Promise
         .all([countPromise,waysPromise])
         .then(function([pageNum,ways]){
-            res.render('wayList',{
+            res.render('wayList0',{
                 title:'渠道列表',
                 pageNum,
                 ways,

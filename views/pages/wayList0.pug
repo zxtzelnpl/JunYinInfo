@@ -1,0 +1,56 @@
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
+
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/user-list.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
+
+
+    body
+        include ../include/navbar
+        include ../include/sidebar
+        .content
+            .container-fluid
+                .users-list#pad-wrapper
+                    .row-fluid.header
+                        h3 Users
+                        .span10.pull-right
+                            input.span5.search(type="data")
+                            input.span5.search(type="data")
+                            a.btn-flat.success.pull-right(href="#") NEW USER
+                    .row-fluid.table
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th.span4.sortable 名称
+                                    th.span4.sortable 连接地址
+                                    th.span4.sortable 点击次数
+                                    th.span4.sortable 查看
+                                    th.span4.sortable 修改
+                            tbody
+                                if ways && ways.length > 0
+                                    each item in ways
+                                        tr(class="item-id-" + item._id)
+                                            td #{item.name}
+                                            td #{url + item._id}
+                                            td #{item.clickCount}
+                                            td: a(target="_blank", href= "/admin/leavemes/" + item._id + "/1") 查看
+                                            td: a(target="_blank", href= "/admin/way/wayupdate/" + item._id) 修改
+                    .pagination.pull-right
+                        ul
+                            - var n=1
+                            while n <= pageNum
+                                li: a(href="/admin/way/waylist/"+n)=n++
+
+
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")
