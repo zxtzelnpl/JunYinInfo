@@ -1,22 +1,43 @@
-extends ../admin/layout
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
 
-block css
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/user-list.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
 
-block content
-    .row
-        .col-sm-4.col-sm-offset-4
-            table.table.table-hover.table-bordered
-                tbody
-                    tr
-                        td.text-right 渠道名称：
-                        td #{way.name}
-                    tr
-                        td.text-right 渠道回复内容：
-                        td #{way.autoReplay}
-                    tr
-                        td.text-right 渠道点击次数：
-                        td #{way.clickCount}
-                    tr
-                        td.text-right 创建时间：
-                        td #{moment(way.createAt).format('MM/DD/YYYY')}
-block js
+
+    body
+        include ../include/navbar
+        include ../include/sidebar
+        .content
+            .container-fluid
+                .users-list#pad-wrapper
+                    .row-fluid.header
+                        h3 #{title}
+                    .row-fluid.table
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th.span4.sortable 渠道名称
+                                    th.span4.sortable 渠道回复内容
+                                    th.span4.sortable 渠道点击次数
+                                    th.span4.sortable 创建时间
+                            tbody
+                                tr
+                                    td #{way.name}
+                                    td #{way.autoReplay}
+                                    td #{way.clickCount}
+                                    td #{moment(way.createAt).format('MM/DD/YYYY')}
+
+
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")

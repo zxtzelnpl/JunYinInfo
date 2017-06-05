@@ -1,47 +1,56 @@
-extends ../admin/layout
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
 
-block css
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/user-list.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
 
-block content
-    .row
-        .col-sm-4.col-sm-offset-4
-            table.table.table-hover.table-bordered
-                tbody
-                    tr
-                        td.text-right 用户名：
-                        td #{user0.name}
-                    tr
-                        td.text-right 昵称：
-                        td #{user0.nickName}
-                    tr
-                        td.text-right 手机：
-                        td #{user0.phone}
-                    tr
-                        td.text-right 邮箱：
-                        td #{user0.email}
-                    tr
-                        td.text-right 性别：
-                        td #{user0.sex}
-                    tr
-                        td.text-right 等级：
-                        td #{user0.level}
-                    tr
-                        td.text-right 渠道：
-                        if(user0.way&&user0.way.name)
-                            td #{user0.way.name}
-                        else
-                            td 无渠道
-                    tr
-                        td.text-right 是否被禁用：
-                        td #{user0.forbidden}
 
-                    tr
-                        td.text-right 创建时间：
-                        td #{moment(user0.createAt).format('MM/DD/YYYY')}
-                    tr
-                        td.text-right 修改时间：
-                        td #{moment(user0.updateAt).format('MM/DD/YYYY')}
-                    tr
-                        td.text-right 是否在线：
-                        td #{user0.online}
-block js
+    body
+        include ../include/navbar
+        include ../include/sidebar
+        .content
+            .container-fluid
+                .users-list#pad-wrapper
+                    .row-fluid.header
+                        h3 #{title}
+                    .row-fluid.table
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th.span1.sortable 用户名:
+                                    th.span1.sortable 昵称:
+                                    th.span2.sortable 手机:
+                                    th.span1.sortable 邮箱:
+                                    th.span1.sortable 等级:
+                                    th.span1.sortable 渠道:
+                                    th.span1.sortable 是否被禁用:
+                                    th.span2.sortable 创建时间:
+                                    th.span2.sortable 修改时间:
+                            tbody
+                                tr
+                                    td #{user0.name}
+                                    td #{user0.nickName}
+                                    td #{user0.phone}
+                                    td #{user0.email}
+                                    td #{user0.level}
+                                    if(user0.way && user0.way.name)
+                                        td #{user0.way.name}
+                                    else
+                                        td 无渠道
+                                    td #{user0.forbidden}
+                                    td #{moment(user0.createAt).format('MM/DD/YYYY')}
+                                    td #{moment(user0.updateAt).format('MM/DD/YYYY')}
+
+
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")
