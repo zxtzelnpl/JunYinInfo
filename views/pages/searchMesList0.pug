@@ -1,0 +1,126 @@
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
+
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/user-list.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
+
+
+    body
+        include ../include/navbar
+        include ../include/sidebar
+        .content
+            .container-fluid
+                .users-list#pad-wrapper
+                    .row-fluid.header
+                        div.span3.btn-group(role="group")
+                            button.btn.btn-default
+                                | 点击：
+                                span.badge #{clickCount}
+                            button.btn.btn-default
+                                | 留言：
+                                span.badge #{listCount}
+                            button.btn.btn-default
+                                | 对话：
+                                span.badge #{chatCount}
+                        form.span6.form-inline(method="POST" action="/admin/leavemes/"+way+"/1" target="_self" id="form")
+                            .form-group.span5
+                                label 开始：
+                                input.form-control(id="timeStart" name="search[timeStart]" type="date" value=timeStart)
+                            .form-group.span5
+                                label 结束：
+                                input.form-control(id="timeEnd" name="search[timeEnd]" type="date" value=timeEnd)
+                            button.btn.btn-primary.span2(type="submit") 查询
+                        .span1.pull-right
+                            a#excel.btn-flat.success.pull-right(href="/excel/" + way) 下载EXCEL
+                    .row-fluid.table
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th 渠道
+                                    th 名称
+                                    th 手机
+                                    th 微信
+                                    th 留言内容
+                                    th 创建时间
+                                    th 最近聊天时间
+                                    th 聊天
+                                    th 完成
+                            tbody
+                                if users && users.length > 0
+                                    each item in users
+                                        tr(class="item-id-" + item._id)
+                                            if(item.way && item.way.name)
+                                                td #{item.way.name}
+                                            else
+                                                td 无渠道
+                                            td #{item.nickName}
+                                            td #{item.phone}
+                                            td #{item.wx}
+                                            td #{item.leaveMes}
+                                            td #{moment(item.createAt).format('MM-DD--HH:mm')}
+                                            td #{moment(item.updateAt).format('MM-DD--HH:mm')}
+                                            td: a.btn.btn-success.btn-sm(target="_blank", href= "/chat/" + item._id) 聊天
+                                            if(item.finish)
+                                                td: a 已经完成
+                                            else
+                                                td: a.btn.btn-danger.btn-sm.finish(data-id=item._id) 点击完成
+                    .pagination.pull-right
+                        ul
+                            - var n=1
+                            while n <= totalPageNum
+                                if(n == pageNum)
+                                    li: a(class="active" data-page=n src="javascript:void(0)")=n++
+                                else
+                                    li: a(data-page=n src="javascript:void(0)")=n++
+
+
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")
+    script.
+        $('.finish').on('click', function (e) {
+            var id = $(e.target).data('id');
+            $.ajax({
+                type: 'GET',
+                url: '/admin/user/finish',
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    if (data.state == 'success') {
+                        $(e.target).parent().html('<a>已经完成</a>')
+                    } else {
+                        alert('连接错误请稍后再试')
+                    }
+                },
+                error: function (err) {
+                    alert('连接错误请稍后再试')
+                }
+            })
+        });
+
+        $('#excel').on('click', function (e) {
+            e.preventDefault();
+            var url = $(e.target).attr('href');
+            var timeStart = $('#timeStart').val();
+            var timeEnd = $('#timeEnd').val();
+            url += '?start=' + timeStart + '&end=' + timeEnd;
+            window.location.href = url;
+        });
+        $('.pagination').on('click', 'li', function (e) {
+            var page = $(e.target).data('page');
+            var form = $('#form');
+            var url = form.attr('action').slice(0, -1);
+            form.attr('action', url + page);
+            form.submit();
+
+        });
