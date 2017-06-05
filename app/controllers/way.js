@@ -3,7 +3,7 @@ const pageSize = 20;
 const Report = require('../../report/report');
 
 exports.wayNew = function (req, res) {
-    res.render('wayNew', {
+    res.render('wayNew0', {
         title: '生成新的渠道'
     })
 };

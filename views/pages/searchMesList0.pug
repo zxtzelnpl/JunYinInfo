@@ -21,7 +21,7 @@ html.login-bg
             .container-fluid
                 .users-list#pad-wrapper
                     .row-fluid.header
-                        div.span3.btn-group(role="group")
+                        div.span2.btn-group(role="group")
                             button.btn.btn-default
                                 | 点击：
                                 span.badge #{clickCount}
@@ -39,7 +39,7 @@ html.login-bg
                                 label 结束：
                                 input.form-control(id="timeEnd" name="search[timeEnd]" type="date" value=timeEnd)
                             button.btn.btn-primary.span2(type="submit") 查询
-                        .span1.pull-right
+                        .span2.pull-right
                             a#excel.btn-flat.success.pull-right(href="/excel/" + way) 下载EXCEL
                     .row-fluid.table
                         table.table.table-hover
@@ -75,12 +75,14 @@ html.login-bg
                                                 td: a.btn.btn-danger.btn-sm.finish(data-id=item._id) 点击完成
                     .pagination.pull-right
                         ul
+                            li: a(href="#") 第
                             - var n=1
                             while n <= totalPageNum
                                 if(n == pageNum)
                                     li: a(class="active" data-page=n src="javascript:void(0)")=n++
                                 else
                                     li: a(data-page=n src="javascript:void(0)")=n++
+                            li: a(href="#") 页
 
 
     script(src="http://code.jquery.com/jquery-latest.js")

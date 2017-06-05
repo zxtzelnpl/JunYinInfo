@@ -26,13 +26,12 @@ html.login-bg
                         .span4
                         .span4
                             form(method="POST" action="/admin/way/new")
-                                input(type="hidden" name="way[_id]" value=way._id)
                                 div.field-box
                                     label(for="wayName") 渠道名称：
-                                    input.span12(id="wayName" name="way[name]" type="text" value=way.name)
+                                    input.span12(id="wayName" name="way[name]" type="text")
                                 div.field-box
                                     label(for="wayAutoReplay") 自动回复：
-                                    textarea.span12(id="wayAutoReplay" name="way[autoReplay]" rows="4" value=way.autoReplay)
+                                    textarea.span12(id="wayAutoReplay" name="way[autoReplay]" rows="4")
                                 div.field-box
                                     div.text-center
                                         input.pull-left.btn-flat.success(id="submit" type="submit" value="提交")

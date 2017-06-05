@@ -39,7 +39,7 @@ exports.userList = function (req, res) {
     Promise
         .all([countPromise, usersPromise])
         .then(function ([totalPageNum, users]) {
-            res.render('userList', {
+            res.render('userList0', {
                 title: '管理用户列表'
                 , users: users
                 , pageCount: totalPageNum
