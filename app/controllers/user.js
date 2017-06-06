@@ -136,7 +136,6 @@ exports.userUpdate = function (req, res) {
     Promise
         .all([waysPromise, userPromise])
         .then(function ([ways, user]) {
-            console.log(ways);
             res.render('userUpdate', {
                 title: user.name + '信息修改',
                 user0: user,
@@ -198,6 +197,7 @@ exports.update = function (req, res) {
         .then(function (_user) {
             let id = _user._id;
             delete _user._id;
+            console.log(_user);
             return new Promise(function (resolve, reject) {
                 UserModel.findByIdAndUpdate(id, {$set: _user}, function (err) {
                     if (err) {
@@ -231,20 +231,20 @@ exports.forbidden = function (req, res) {
     });
     let changePromise = userPromise.then(function (user) {
         return new Promise(function (resolve, reject) {
-            user.forbidden = !user.forbidden;
-            user.save(function (err, user) {
+            let forbidden = !user.forbidden;
+            user.update({forbidden:forbidden},function (err) {
                 if (err) {
                     reject(err)
                 }
-                resolve(user)
+                resolve(forbidden)
             })
         })
     });
     changePromise
-        .then(function (user) {
+        .then(function (forbidden) {
             res.json({
                 state: 'success',
-                forbidden: user.forbidden
+                forbidden: forbidden
             })
         })
         .catch(function (err) {
@@ -335,7 +335,5 @@ exports.signIn = function (req, res) {
 
 exports.signOut = function (req, res) {
     delete req.session.user;
-    return res.json({
-        state: 'success'
-    })
+    return res.redirect('/admin/login');
 };

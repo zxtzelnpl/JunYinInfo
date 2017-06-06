@@ -25,7 +25,7 @@ html.login-bg
                     .row-fluid
                         .span4
                         .span4
-                            form(method="POST" action="/admin/user/signup")
+                            form(method="POST" action="/admin/user/update")
                                 input(type="hidden" name="user[_id]" value=user0._id)
                                 div.field-box
                                     label(for="signUpName") 用户名：
@@ -33,9 +33,6 @@ html.login-bg
                                 div.field-box
                                     label(for="signUpNickName") 昵称：
                                     input.span12(id="signUpNickName" name="user[nickName]" type="text" required="required" value=user0.nickName)
-                                div.field-box
-                                    label(for="signUpPassword") 密码：
-                                    input.span12(id="signUpPassword" name="user[password]" type="text" required="required" value=user0.phone)
                                 div.field-box
                                     label(for="signUpPhone") 手机：
                                     input.span12(id="signUpPhone" name="user[phone]" type="text" required="required" value=user0.phone)
