@@ -6,8 +6,12 @@
             span.icon-bar
             span.icon-bar
         a.brand(href="#")
-            img(src="/vendor/img/logo.png")
+            img(src="/vendor/img/junyin/logo.png")
         ul.nav.pull-right
+            li
+                a 用户：#{user.name}
+            li
+                a 等级：#{user.level}
             li.settings.hidden-phone
                 a(href="/admin/login" role="button")
                     i.icon-share-alt
