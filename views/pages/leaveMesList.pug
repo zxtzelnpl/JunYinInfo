@@ -21,7 +21,10 @@ html.login-bg
             .container-fluid
                 .users-list#pad-wrapper
                     .row-fluid.header
-                        h3 #{way.name||全部渠道}
+                        if(way === 'all')
+                            h3.span1 全部
+                        else
+                            h3.span1 #{users[0].way.name}
                         div.span3.btn-group(role="group")
                             button.btn.btn-default
                                 | 留言：
