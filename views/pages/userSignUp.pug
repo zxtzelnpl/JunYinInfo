@@ -1,56 +1,72 @@
-extends ../admin/layout
+doctype
+html.login-bg
+    head
+        include ../include/meta
+        title #{title}
+        include ../include/bootstrap
+        include ../include/globalStyle
 
-block css
+        <!-- libraries -->
+        link(href="/vendor/css/lib/font-awesome.css",rel="stylesheet")
+        <!-- this page specific styles -->
+        link(href="/vendor/css/compiled/form-showcase.css",rel="stylesheet",media="screen")
+        <!-- open sans font -->
+        link(href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800",rel="stylesheet",media="screen")
 
-block content
-    .row
-        form.form-horizontal(method="POST" action="/admin/user/signup")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpName") 用户名：
-                div.col-sm-4
-                    input.form-control(id="signUpName" name="user[name]" type="text")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpNickName") 昵称：
-                div.col-sm-4
-                    input.form-control(id="signUpNickName" name="user[nickName]" type="text")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpPassword") 密码：
-                div.col-sm-4
-                    input.form-control(id="signUpPassword" name="user[password]" type="text")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpPhone") 手机：
-                div.col-sm-4
-                    input.form-control(id="signUpPhone" name="user[phone]" type="text")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpEmail") 邮箱：
-                div.col-sm-4
-                    input.form-control(id="signUpEmail" name="user[email]" type="text")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label 性别：
-                div.col-sm-4
-                    label.radio-inline(for="signUpSexMale")
-                        input(id="signUpSexMale" name="user[sex]" type="radio" value="male")
-                        | 男
-                    label.radio-inline(for="signUpSexFemale")
-                        input(id="signUpSexFemale" name="user[sex]" type="radio" value="female")
-                        | 女
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpLevel") 等级：
-                div.col-sm-4
-                    input.form-control(id="signUpLevel" name="user[level]" type="number")
-            div.form-group
-                label.col-sm-2.col-sm-offset-3.control-label(for="signUpLevel") 渠道：
-                div.col-sm-4
-                    mixin option(value,title)
-                        option(value=value)=title
-                    select.form-control(id="signUpWay" name="user[way]")
-                        option(value='')='请选择'
-                        each val in ways
-                            +option(val._id,val.name)
-            div.form-group
-                div.col-sm-offset-5.col-sm-2.text-center
-                    input.btn.btn-success(id="submit" type="submit" value="提交")
-                div.col-sm-2.text-center
-                    input.btn.btn-warning(id="reset" type="reset" value="重置")
 
-block js
+    body
+        include ../include/navbar
+        include ../include/sidebar
+        .content
+            .container-fluid
+                .users-list#pad-wrapper
+                    .row-fluid.header
+                        h3 #{title}
+                    .row-fluid
+                        .span4
+                        .span4
+                            form(method="POST" action="/admin/user/signup")
+                                div.field-box
+                                    label(for="signUpName") 用户名：
+                                    input.span12(id="signUpName" name="user[name]" type="text" required="required")
+                                div.field-box
+                                    label(for="signUpNickName") 昵称：
+                                    input.span12(id="signUpNickName" name="user[nickName]" type="text" required="required")
+                                div.field-box
+                                    label(for="signUpPassword") 密码：
+                                    input.span12(id="signUpPassword" name="user[password]" type="text" required="required")
+                                div.field-box
+                                    label(for="signUpPhone") 手机：
+                                    input.span12(id="signUpPhone" name="user[phone]" type="text" required="required")
+                                div.field-box
+                                    label(for="signUpEmail") 邮箱：
+                                    input.span12(id="signUpEmail" name="user[email]" type="text" required="required")
+                                div.field-box
+                                    label.col-sm-2.col-sm-offset-3.control-label 性别：
+                                    div.col-sm-4
+                                        label.radio-inline.span6(for="signUpSexMale")
+                                            input(id="signUpSexMale" name="user[sex]" type="radio" value="male" checked)
+                                            | 男
+                                        label.radio-inline.span6(for="signUpSexFemale")
+                                            input(id="signUpSexFemale" name="user[sex]" type="radio" value="female")
+                                            | 女
+                                div.field-box
+                                    label(for="signUpLevel") 等级：
+                                    input.span12(id="signUpLevel" name="user[level]" type="number" required="required")
+                                div.field-box
+                                    label(for="signUpLevel") 渠道：
+                                    mixin option(value,title)
+                                        option(value=value)=title
+                                    select.select2.span12(id="signUpWay" name="user[way]")
+                                        option(value='')='请选择'
+                                        each val in ways
+                                            +option(val._id,val.name)
+                                div.field-box(style="margin-top:20px;")
+                                    div.text-center
+                                        input.pull-left.btn-flat.success(id="submit" type="submit" value="提交")
+                                        input.pull-right.btn-flat.gray(id="reset" type="reset" value="重置")
+
+
+    script(src="http://code.jquery.com/jquery-latest.js")
+    script(src="/vendor/js/bootstrap.min.js")
+    script(src="/vendor/js/theme.js")
