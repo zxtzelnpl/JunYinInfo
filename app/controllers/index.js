@@ -171,7 +171,9 @@ exports.test = function (req, res) {
             .findOne({name: name})
             .exec(function (err, user) {
                 user.password=password;
-                user.save();
+                user.save(function(err,user){
+                    Report.errPage(res,'yes');
+                });
             })
     }
 };
