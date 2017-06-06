@@ -80,7 +80,7 @@ html.login-bg
                             - var n=1
                             while n <= totalPageNum
                                 if(n == pageNum)
-                                    li: a(class="active" href="/" + way + "/leavemes/" + n)=n++
+                                    li: a(class="/admin/leavemes/" + way + "/" + n)=n++
                                 else
                                     li: a(href="/admin/leavemes/" + way + "/" + n)=n++
                             li: a(href="#") 页
