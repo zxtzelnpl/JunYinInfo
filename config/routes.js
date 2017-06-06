@@ -29,7 +29,7 @@ module.exports = function (app, io) {
     app.get('/admin/usersignup', Admin.adminRequired, User.userSignUp);//PAGE：用户注册
     app.get('/admin/userdetail/:id', Admin.adminRequired, User.userDetail);//PAGE：用户详情
     app.get('/admin/userupdate/:id', Admin.adminRequired, User.userUpdate);//PAGE：用户更新
-    app.post('/admin/user/signup', Admin.adminRequired, User.signUp);//JSON：用户注册
+    app.post('/admin/user/signup', Admin.adminRequired, User.signUp);//FORM：用户注册
     app.post('/admin/user/update', Admin.adminRequired, User.update);//JSON：用户更新
     app.delete('/admin/user/delete', Admin.adminRequired, User.delete);//JSON：用户删除
     app.get('/admin/user/forbidden', Admin.adminRequired, User.forbidden);//JSON：用户禁用

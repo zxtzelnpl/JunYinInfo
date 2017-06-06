@@ -149,6 +149,17 @@ exports.userUpdate = function (req, res) {
 };
 
 exports.signUp = function (req, res) {
+    let checkName = new Promise(function(resolve,reject){
+        let _user = req.body.user;
+        let name=_user.name;
+        UserModel
+            .findOne({name:name})
+            .exec(function(err,user){
+                if(err){reject(err)}
+                if(user){reject('有人的名字和你一样，换个名字吧')}
+                resolve(true)
+            })
+    });
     let savePromise = new Promise(function (resolve, reject) {
         let user;
         let _user = req.body.user;
@@ -160,8 +171,9 @@ exports.signUp = function (req, res) {
             resolve(user);
         })
     });
-    savePromise
-        .then(function (user) {
+    Promise
+        .all([savePromise,checkName])
+        .then(function ([user]) {
             res.redirect('/admin/userdetail/' + user._id)
         })
         .catch(function (err) {
