@@ -73,11 +73,11 @@ html.login-bg
                              location.href = '/admin/way/waylist/1';
                         }
                         else {
-                            console.log(data.err)
+                            alert(data.err)
                         }
                     }
                     , error: function (err) {
-                        console.log(err)
+                        alert(err)
                     }
                 })
             });
