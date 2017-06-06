@@ -82,7 +82,7 @@ exports.userList = function (req, res) {
     Promise
         .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
         .then(function ([clickCount, listCount, lists, chatCount]) {
-            res.render('leaveMesList0', {
+            res.render('leaveMesList', {
                 title: '留言列表',
                 way: way,
                 users: lists,
@@ -187,7 +187,7 @@ exports.userSearch = function (req, res) {
     Promise
         .all([clickCountPromise, listCountPromise, listsPromise, chatCountPromise])
         .then(function ([clickCount, listCount, lists, chatCount]) {
-            res.render('searchMesList0', {
+            res.render('searchMesList', {
                 title: '留言列表',
                 way: way,
                 timeStart: req.body.search['timeStart'],

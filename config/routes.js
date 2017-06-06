@@ -49,9 +49,6 @@ module.exports = function (app, io) {
     app.post('/admin/way/new', Admin.adminRequired, Way.new);//渠道新建
     app.post('/admin/way/update', Admin.adminRequired, Way.update);//渠道更新
 
-    /*页面：信息提示*/
-    app.get('/admin/information/:information', Admin.adminRequired, Admin.information);//PAGE：管理员信息提示
-
     /*Index Test*/
     app.get('/test', Index.test);
 

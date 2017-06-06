@@ -3,7 +3,7 @@ const pageSize = 20;
 const Report = require('../../report/report');
 
 exports.wayNew = function (req, res) {
-    res.render('wayNew0', {
+    res.render('wayNew', {
         title: '生成新的渠道'
     })
 };
@@ -104,7 +104,7 @@ exports.wayList = function (req, res) {
     Promise
         .all([countPromise,waysPromise])
         .then(function([pageNum,ways]){
-            res.render('wayList0',{
+            res.render('wayList',{
                 title:'渠道列表',
                 pageNum,
                 ways,
