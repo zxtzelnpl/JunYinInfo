@@ -8,7 +8,7 @@ exports.excel = function (req, res) {
     let optFind={
             level: 0
         };
-    if(way!=='admin'){
+    if(way!=='all'){
         optFind.way=way;
     }
     if (req.query.start || req.query.end) {
@@ -38,6 +38,7 @@ exports.excel = function (req, res) {
     let usersPro = new Promise(function (resolve, reject) {
         UserModel
             .find(optFind)
+            .populate('way','name')
             .exec(function (err, users) {
                 if (err) {
                     reject(err)
@@ -49,7 +50,7 @@ exports.excel = function (req, res) {
         .then(function (users) {
             users.forEach(function (user) {
                 let arr = [];
-                arr.push(user.way);
+                arr.push(user.way.name);
                 arr.push(user.nickName);
                 arr.push(user.phone || '');
                 arr.push(user.leaveMes || '');

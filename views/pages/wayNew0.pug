@@ -28,10 +28,10 @@ html.login-bg
                             form(method="POST" action="/admin/way/new")
                                 div.field-box
                                     label(for="wayName") 渠道名称：
-                                    input.span12(id="wayName" name="way[name]" type="text")
+                                    input.span12(id="wayName" name="way[name]" type="text" required="required")
                                 div.field-box
                                     label(for="wayAutoReplay") 自动回复：
-                                    textarea.span12(id="wayAutoReplay" name="way[autoReplay]" rows="4")
+                                    input.span12(id="wayAutoReplay" name="way[autoReplay]" type="text" required="required")
                                 div.field-box
                                     div.text-center
                                         input.pull-left.btn-flat.success(id="submit" type="submit" value="提交")

@@ -29,10 +29,10 @@ html.login-bg
                                 input(type="hidden" name="way[_id]" value=way._id)
                                 div.field-box
                                     label(for="wayName") 渠道名称：
-                                    input.span12(id="wayName" name="way[name]" type="text" value=way.name)
+                                    input.span12(id="wayName" name="way[name]" type="text" value=way.name required="required")
                                 div.field-box
                                     label(for="wayAutoReplay") 自动回复：
-                                    textarea.span12(id="wayAutoReplay" name="way[autoReplay]" rows="4" value=way.autoReplay)
+                                    input.span12(id="wayAutoReplay" name="way[autoReplay]" type="text" value=way.autoReplay required="required")
                                 div.field-box
                                     div.text-center
                                         input.pull-left.btn-flat.success(id="submit" type="submit" value="提交")
