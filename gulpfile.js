@@ -16,7 +16,6 @@ const nodemon = require('gulp-nodemon');
 const connect = require('gulp-connect');
 const browserSync = require('browser-sync').create();
 const glob = require('glob');
-const es = require('event-stream');
 
 const reload = browserSync.reload;
 
@@ -25,7 +24,6 @@ const production = process.env.NODE_ENV === 'production';
 const paths = {
     srcJs: ['src/*.js', 'src/**/*.js']
     , index: 'src/index.js'
-    , admin:'admin/js/*.js'
     , jsTo: 'public/js'
     , less: ['src/less/*.less', 'src/less/**/*.less', '!src/less/normalize/*']
     , normalize: 'node_modules/normalize.css/normalize.css'
@@ -95,27 +93,6 @@ gulp.task('browserify-index', function () {
 
 /**
  |--------------------------------------------------------------------------
- | Compile only project files, excluding all third-party dependencies.
- |--------------------------------------------------------------------------
- */
-gulp.task('admin-js', function (cb) {
-    glob(paths.admin, function (err, files) {
-        if (err) cb(err);
-
-        let tasks = files.map(function (entry) {
-            return browserify({entries: [entry]})
-                .external(dependencies)
-                .transform(babelify, {presets: ['es2015']})
-                .bundle()
-                .pipe(source(entry))
-                .pipe(gulp.dest('public'));
-        });
-        es.merge(tasks).on('end', cb);
-    });
-});
-
-/**
- |--------------------------------------------------------------------------
  | Compile LESS stylesheets.
  |--------------------------------------------------------------------------
  */
@@ -143,29 +120,13 @@ gulp.task('normalize', function () {
         .pipe(gulp.dest(paths.cssTo));
 });
 
-/**
- |--------------------------------------------------------------------------
- | Compile bootstrap stylesheets.
- |--------------------------------------------------------------------------
- */
-gulp.task('bootstrap', function () {
-    return gulp.src([
-        'node_modules/bootstrap/dist/**/**.css'
-        , 'node_modules/bootstrap/dist/**/**.eot'
-        , 'node_modules/bootstrap/dist/**/**.svg'
-        , 'node_modules/bootstrap/dist/**/**.ttf'
-        , 'node_modules/bootstrap/dist/**/**.woff'
-        , 'node_modules/bootstrap/dist/**/**.woff2'
-    ])
-        .pipe(gulp.dest('public/admin'));
-});
 
 /**
  |--------------------------------------------------------------------------
  | Compile bootstrap stylesheets.
  |--------------------------------------------------------------------------
  */
-gulp.task('bootstrap1', function () {
+gulp.task('bootstrap', function () {
     return gulp.src([
         'src/model/**/**.*',
         'src/model/**/**/**.*',
@@ -240,12 +201,8 @@ gulp.task('server', ['nodemon'], function () {
  | Watch for change.
  |--------------------------------------------------------------------------
  */
-gulp.task('watch', ['browserify-index', 'admin-js', 'less'], function () {
+gulp.task('watch', ['browserify-index', 'less'], function () {
     gulp.watch(paths.srcJs, ['browserify-index']).on('change', function (event) {
-        console.log('File ' + event.path + ' was ' + event.type + ', running tasks...')
-    });
-
-    gulp.watch(paths.admin, ['admin-js']).on('change', function (event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...')
     });
 
@@ -267,6 +224,5 @@ gulp.task('produce', [
     , 'images'
     , 'favicon'
     , 'browserify-index'
-    , 'admin-js'
     , 'less'
 ]);
