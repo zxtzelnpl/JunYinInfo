@@ -222,7 +222,6 @@ gulp.task('produce', [
     , 'normalize'
     , 'bootstrap'
     , 'images'
-    , 'favicon'
     , 'browserify-index'
     , 'less'
 ]);

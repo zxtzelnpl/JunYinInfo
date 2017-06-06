@@ -2,7 +2,7 @@ const Report = require('../../report/report');
 
 exports.login = function (req, res) {
     res.render('login', {
-        title:'登录界面'
+        title:'在线咨询'
     });
 };
 
